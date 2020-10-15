@@ -1,0 +1,49 @@
+{
+  "name": "blueways/bw-covid-numbers",
+  "type": "typo3-cms-extension",
+  "description": "TYPO3 extension for showing COVID-19 numbers",
+  "keywords": [
+    "TYPO3"
+  ],
+  "homepage": "https://www.blueways.de",
+  "authors": [
+    {
+      "name": "Maik Schneider",
+      "role": "Developer",
+      "homepage": "https://www.blueways.de"
+    }
+  ],
+  "license": [
+    "GPL-2.0-or-later"
+  ],
+  "config": {
+    "bin-dir": "bin",
+    "vendor-dir": "vendor",
+    "platform": {
+      "php": "7.2"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": "public"
+    }
+  },
+  "require": {
+    "ext-json": "*",
+    "typo3/cms-core": "^7.0 || ^8.0 || ^9.0 || ^10.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Blueways\\BwCovidNumbers\\": "Classes"
+    }
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "typo3/cms-base-distribution": "^7.0",
+    "bk2k/bootstrap-package": "^7.0"
+  },
+  "suggest": {
+    "reelworx/rx-shariff": "~10.0"
+  }
+}
