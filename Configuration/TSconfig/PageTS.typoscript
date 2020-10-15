@@ -1,0 +1,16 @@
+mod {
+	wizards.newContentElement.wizardItems.plugins {
+		elements {
+			covidnumbers {
+				iconIdentifier = bw_covid_numbers-icon
+				title = LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:bwcovidnumbers_pi1.title
+				description = LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:bwcovidnumbers_pi1.description
+				tt_content_defValues {
+					CType = list
+					list_type = bwcovidnumbers_pi1
+				}
+			}
+		}
+		show = *
+	}
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z"
+		  product-name="bw_bookingmanager">
+		<header/>
+		<body>
+			<trans-unit id="bwcovidnumbers_pi1.title">
+				<source>COVID-19 numbers</source>
+			</trans-unit>
+			<trans-unit id="bwcovidnumbers_pi1.description">
+				<source>Display number of corona virus cases in Germany</source>
+			</trans-unit>
+			<trans-unit id="flexform.sheetTitle">
+				<source>General settings</source>
+			</trans-unit>
+			<trans-unit id="flexform.view">
+				<source>View</source>
+			</trans-unit>
+			<trans-unit id="flexform.view.chart">
+				<source>Chart</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
