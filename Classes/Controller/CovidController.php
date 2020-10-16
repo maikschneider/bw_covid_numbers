@@ -41,6 +41,12 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $dataOverTime = $this->getTransformedData();
 
+        // cut data
+        if ((int)$this->settings['filterTime'] > 0) {
+            $offset = count($dataOverTime) - (int)$this->settings['filterTime'];
+            $dataOverTime = array_slice($dataOverTime, $offset);
+        }
+
         // rename array keys
         foreach ($dataOverTime as $key => $day) {
             $date = new \DateTime();

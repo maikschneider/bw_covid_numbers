@@ -82,6 +82,9 @@
 			<trans-unit id="flexform.settings.district">
 				<source>District ID or name</source>
 			</trans-unit>
+			<trans-unit id="flexform.settings.filterTime">
+				<source>Days to display</source>
+			</trans-unit>
 			<trans-unit id="chart.dataset1.label">
 				<source>Daily new infections</source>
 			</trans-unit>

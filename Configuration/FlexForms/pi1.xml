@@ -53,6 +53,19 @@
 							</config>
 						</TCEforms>
 					</settings.filterMode>
+					<settings.filterTime>
+						<TCEforms>
+							<label>
+								LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.settings.filterTime
+							</label>
+							<config>
+								<type>input</type>
+								<eval>trim,int</eval>
+								<size>2</size>
+								<default>30</default>
+							</config>
+						</TCEforms>
+					</settings.filterTime>
 					<settings.state>
 						<TCEforms>
 							<label>
