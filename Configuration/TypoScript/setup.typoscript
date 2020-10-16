@@ -1,0 +1,15 @@
+plugin.tx_bwcovidnumbers_pi1 {
+	settings {
+		chartsjs = {$plugin.tx_bwcovidnumbers_pi1.settings.chartsjs}
+		chartsjs.compress = 0
+		chartsjs.forceOnTop = 0
+		chartsjs.allWrap =
+		chartsjs.excludeFromConcatenation = 0
+
+		chartsjsCss = {$plugin.tx_bwcovidnumbers_pi1.settings.chartsjsCss}
+		chartsjsCss.compress = 0
+		chartsjsCss.forceOnTop = 0
+		chartsjsCss.allWrap =
+		chartsjsCss.excludeFromConcatenation = 0
+	}
+}

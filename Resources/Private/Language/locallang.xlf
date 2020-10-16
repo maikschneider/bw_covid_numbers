@@ -19,6 +19,69 @@
 			<trans-unit id="flexform.view.chart">
 				<source>Chart</source>
 			</trans-unit>
+			<trans-unit id="flexform.view.chart">
+				<source>Chart</source>
+			</trans-unit>
+			<trans-unit id="flexform.filterMode">
+				<source>Filter mode</source>
+			</trans-unit>
+			<trans-unit id="state">
+				<source>State</source>
+			</trans-unit>
+			<trans-unit id="district">
+				<source>District</source>
+			</trans-unit>
+			<trans-unit id="state.1">
+				<source>Schleswig-Holstein</source>
+			</trans-unit>
+			<trans-unit id="state.2">
+				<source>Hamburg</source>
+			</trans-unit>
+			<trans-unit id="state.3">
+				<source>Niedersachsen</source>
+			</trans-unit>
+			<trans-unit id="state.4">
+				<source>Bremen</source>
+			</trans-unit>
+			<trans-unit id="state.5">
+				<source>Nordrhein-Westfalen</source>
+			</trans-unit>
+			<trans-unit id="state.6">
+				<source>Hessen</source>
+			</trans-unit>
+			<trans-unit id="state.7">
+				<source>Rheinland-Pfalz</source>
+			</trans-unit>
+			<trans-unit id="state.8">
+				<source>Baden-Württemberg</source>
+			</trans-unit>
+			<trans-unit id="state.9">
+				<source>Bayern</source>
+			</trans-unit>
+			<trans-unit id="state.10">
+				<source>Saarland</source>
+			</trans-unit>
+			<trans-unit id="state.11">
+				<source>Berlin</source>
+			</trans-unit>
+			<trans-unit id="state.12">
+				<source>Brandenburg</source>
+			</trans-unit>
+			<trans-unit id="state.13">
+				<source>Mecklenburg-Vorpommern</source>
+			</trans-unit>
+			<trans-unit id="state.14">
+				<source>Sachsen</source>
+			</trans-unit>
+			<trans-unit id="state.15">
+				<source>Sachsen-Anhalt</source>
+			</trans-unit>
+			<trans-unit id="state.16">
+				<source>Thüringen</source>
+			</trans-unit>
+			<trans-unit id="flexform.settings.district">
+				<source>District ID or name</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

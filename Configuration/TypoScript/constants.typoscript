@@ -1,0 +1,6 @@
+plugin.tx_bwcovidnumbers_pi1 {
+	settings {
+		chartsjs = EXT:bw_covid_numbers/Resources/Public/JavaScript/Chart.bundle.min.js
+		chartsjsCss = EXT:bw_covid_numbers/Resources/Public/Css/Chart.min.css
+	}
+}
