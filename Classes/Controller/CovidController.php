@@ -2,8 +2,9 @@
 
 namespace Blueways\BwCovidNumbers\Controller;
 
-use dbData;
+use stdClass;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Lang\LanguageService;
 
 /**
  * Class CovidController
@@ -38,7 +39,46 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $this->settings['chartsjsCss']['excludeFromConcatenation']);
         }
 
-        $this->getTransformedData();
+        $dataOverTime = $this->getTransformedData();
+
+        // rename array keys
+        foreach ($dataOverTime as $key => $day) {
+            $date = new \DateTime();
+            $date->setTimestamp(substr($key, 0, 10));
+            $dataOverTime[date('d.m.', $key / 1000)] = $day;
+            unset($dataOverTime[$key]);
+        }
+
+        // translation
+        $llService = $this->getLanguageService();
+
+        // create chart.js dataset & label
+        $dataset1 = new stdClass();
+        $dataset1->label = $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:chart.dataset1.label');
+        $dataset1->data = [];
+
+        $dataset2 = new stdClass();
+        $dataset2->label = $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:chart.dataset1.label');
+        $dataset2->data = [];
+
+        $labels = [];
+
+        foreach ($dataOverTime as $key => $day) {
+            $dataset1->data[] = $day['AnzahlFall'];
+            $dataset2->data[] = $day['avg'];
+            $labels[] = $key;
+        }
+
+        // create global variables
+        $js = '';
+        $js .= 'const bwcovidnumbers = {};';
+        $js .= 'bwcovidnumbers.dataset1 = ' . json_encode($dataset1) . ';';
+        $js .= 'bwcovidnumbers.dataset2 = ' . json_encode($dataset2) . ';';
+        $js .= 'bwcovidnumbers.labels = ' . json_encode($labels) . ';';
+        $js .= 'window.bwcovidnumbers = bwcovidnumbers' . ';';
+        $js .= 'console.log(window.bwcovidnumbers);';
+
+        $pageRender->addJsInlineCode('bwcovidnumbers', $js, true, true);
 
         return '';
     }
@@ -84,15 +124,25 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $previousReportIndex = $key;
         }
 
-        $dates = [];
+        return $dataOverTime;
+    }
 
-        foreach ($dataOverTime as $key => $day) {
-            $date = new \DateTime();
-            $date->setTimestamp(substr($key, 0, 10));
-            $dates[$date = date('d.m.y', $key / 1000)] = $day;
+    /**
+     * Generate where statement from flexform settings
+     *
+     * @return string
+     */
+    private function getWhereStatement()
+    {
+        if ((int)$this->settings['filterMode'] === 0) {
+            return "IdBundesland='" . $this->settings['state'] . "'";
         }
 
-        return $dataOverTime;
+        if (is_numeric($this->settings['district'])) {
+            return "IdLandkreis='" . $this->settings['district'] . "'";
+        }
+
+        return "Landkreis like ' % " . $this->settings['district'] . " % '";
     }
 
     private function getApiData($whereStatement)
@@ -110,21 +160,10 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     /**
-     * Generate where statement from flexform settings
-     *
-     * @return string
+     * @return LanguageService
      */
-    private function getWhereStatement()
+    private function getLanguageService()
     {
-        if ((int)$this->settings['filterMode'] === 0) {
-            return "IdBundesland='" . $this->settings['state'] . "'";
-        }
-
-        if(is_numeric($this->settings['district'])) {
-            return "IdLandkreis='" . $this->settings['district'] . "'";
-        }
-
-        return "Landkreis like '%" . $this->settings['district'] . "%'";
+        return $GLOBALS['LANG'] ?: GeneralUtility::makeInstance(LanguageService::class);
     }
-
 }
