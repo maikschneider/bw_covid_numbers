@@ -11,5 +11,8 @@ plugin.tx_bwcovidnumbers_pi1 {
 		chartsjsCss.forceOnTop = 0
 		chartsjsCss.allWrap =
 		chartsjsCss.excludeFromConcatenation = 0
+
+
+		initChartJs = {$plugin.tx_bwcovidnumbers_pi1.settings.initChartJs}
 	}
 }
