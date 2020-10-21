@@ -2,7 +2,7 @@
 
 namespace Blueways\BwCovidNumbers\Controller;
 
-use stdClass;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Lang\LanguageService;
 
@@ -19,8 +19,9 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRender */
         $pageRender = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         if ($this->settings['chartsjs']['_typoScriptNodeValue']) {
-            $pageRender->addJsFooterFile(
-                $this->settings['chartsjs']['_typoScriptNodeValue'],
+
+            $pageRender->addJsFooterLibrary('chartjs',
+                $this->getAssetPath($this->settings['chartsjs']['_typoScriptNodeValue']),
                 'text/javascript',
                 $this->settings['chartsjs']['compress'],
                 $this->settings['chartsjs']['forceOnTop'], $this->settings['chartsjs']['allWrap'],
@@ -29,7 +30,7 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         if ($this->settings['chartsjsCss']['_typoScriptNodeValue']) {
             $pageRender->addCssFile(
-                $this->settings['chartsjsCss']['_typoScriptNodeValue'],
+                $this->getAssetPath($this->settings['chartsjsCss']['_typoScriptNodeValue']),
                 'stylesheet',
                 'all',
                 'chartJs',
@@ -39,7 +40,20 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $this->settings['chartsjsCss']['excludeFromConcatenation']);
         }
 
+        if ($this->settings['initChartJs']) {
+            $pageRender->addJsFooterFile(
+                $this->getAssetPath($this->settings['initChartJs']),
+                'text/javascript');
+        }
+
         $dataOverTime = $this->getTransformedData();
+
+        // rename array keys
+        foreach ($dataOverTime as $key => $day) {
+            $date = date('d.m.', $key / 1000);
+            $dataOverTime[$date] = $day;
+            unset($dataOverTime[$key]);
+        }
 
         // cut data
         if ((int)$this->settings['filterTime'] > 0) {
@@ -47,46 +61,55 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $dataOverTime = array_slice($dataOverTime, $offset);
         }
 
-        // rename array keys
-        foreach ($dataOverTime as $key => $day) {
-            $date = new \DateTime();
-            $date->setTimestamp(substr($key, 0, 10));
-            $dataOverTime[date('d.m.', $key / 1000)] = $day;
-            unset($dataOverTime[$key]);
-        }
-
         // translation
         $llService = $this->getLanguageService();
 
         // create chart.js dataset & label
-        $dataset1 = new stdClass();
-        $dataset1->label = $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:chart.dataset1.label');
-        $dataset1->data = [];
+        $dataset1label = $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:chart.dataset1.label');
+        $dataset1data = [];
 
-        $dataset2 = new stdClass();
-        $dataset2->label = $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:chart.dataset1.label');
-        $dataset2->data = [];
+        $dataset2label = $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:chart.dataset2.label');
+        $dataset2data = [];
 
         $labels = [];
 
+        // fill in data
         foreach ($dataOverTime as $key => $day) {
-            $dataset1->data[] = $day['AnzahlFall'];
-            $dataset2->data[] = $day['avg'];
+            $dataset1data[] = $day['AnzahlFall'];
+            $dataset2data[] = $day['avg'];
             $labels[] = $key;
         }
 
         // create global variables
         $js = '';
         $js .= 'const bwcovidnumbers = {};';
-        $js .= 'bwcovidnumbers.dataset1 = ' . json_encode($dataset1) . ';';
-        $js .= 'bwcovidnumbers.dataset2 = ' . json_encode($dataset2) . ';';
+        $js .= 'bwcovidnumbers.dataset1data = ' . json_encode($dataset1data) . ';';
+        $js .= 'bwcovidnumbers.dataset1label = "' . $dataset1label . '";';
+        $js .= 'bwcovidnumbers.dataset2data = ' . json_encode($dataset2data) . ';';
+        $js .= 'bwcovidnumbers.dataset2label = "' . $dataset2label . '";';
         $js .= 'bwcovidnumbers.labels = ' . json_encode($labels) . ';';
         $js .= 'window.bwcovidnumbers = bwcovidnumbers' . ';';
         $js .= 'console.log(window.bwcovidnumbers);';
 
         $pageRender->addJsInlineCode('bwcovidnumbers', $js, true, true);
 
-        return '';
+        return '<canvas id="myChart" width="400" height="150"></canvas>';
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
+    private function getAssetPath($path)
+    {
+        if (strpos($path, 'EXT:') === 0) {
+            $parts = explode('/', $path);
+            unset($parts[0]);
+            $path = ExtensionManagementUtility::siteRelPath('bw_covid_numbers');
+            $path .= implode('/', $parts);
+        }
+
+        return $path;
     }
 
     public function getTransformedData()
@@ -148,7 +171,7 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             return "IdLandkreis='" . $this->settings['district'] . "'";
         }
 
-        return "Landkreis like ' % " . $this->settings['district'] . " % '";
+        return "Landkreis like '%" . $this->settings['district'] . "%'";
     }
 
     private function getApiData($whereStatement)
