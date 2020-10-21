@@ -91,6 +91,12 @@
 			<trans-unit id="chart.dataset2.label">
 				<source>Daily new infections (7-Days Ø)</source>
 			</trans-unit>
+			<trans-unit id="scheduler.name">
+				<source>COVID-19 numbers cache</source>
+			</trans-unit>
+			<trans-unit id="scheduler.description">
+				<source>Clear the cache table of Covid-19 numbers extension</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

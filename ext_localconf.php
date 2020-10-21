@@ -31,3 +31,11 @@ if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('
     <INCLUDE_TYPOSCRIPT:source="FILE:EXT:bw_covid_numbers/Configuration/TSconfig/PageTS.typoscript">
 ');
+
+// register cache cleaning task
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\Blueways\BwCovidNumbers\Task\ClearCacheTask::class] = array(
+    'extension' => 'bw_covid_numbers',
+    'title' => 'LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:scheduler.name',
+    'description' => 'LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:scheduler.description',
+    'additionalFields' => ''
+);
