@@ -80,20 +80,24 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $labels[] = $key;
         }
 
+        // get unique id to display multiple elements on one page
+        $uid = $this->configurationManager->getContentObject() ? $this->configurationManager->getContentObject()->data['uid'] : mt_rand(0,
+            99999);
+        
         // create global variables
         $js = '';
-        $js .= 'const bwcovidnumbers = {};';
-        $js .= 'bwcovidnumbers.dataset1data = ' . json_encode($dataset1data) . ';';
-        $js .= 'bwcovidnumbers.dataset1label = "' . $dataset1label . '";';
-        $js .= 'bwcovidnumbers.dataset2data = ' . json_encode($dataset2data) . ';';
-        $js .= 'bwcovidnumbers.dataset2label = "' . $dataset2label . '";';
-        $js .= 'bwcovidnumbers.labels = ' . json_encode($labels) . ';';
-        $js .= 'window.bwcovidnumbers = bwcovidnumbers' . ';';
-        $js .= 'console.log(window.bwcovidnumbers);';
+        $js .= 'const chartConfig' . $uid . ' = {};';
+        $js .= 'chartConfig' . $uid . '.dataset1data = ' . json_encode($dataset1data) . ';';
+        $js .= 'chartConfig' . $uid . '.dataset1label = "' . $dataset1label . '";';
+        $js .= 'chartConfig' . $uid . '.dataset2data = ' . json_encode($dataset2data) . ';';
+        $js .= 'chartConfig' . $uid . '.dataset2label = "' . $dataset2label . '";';
+        $js .= 'chartConfig' . $uid . '.labels = ' . json_encode($labels) . ';';
+        $js .= 'window.bwcovidnumbers = window.bwcovidnumbers || {}' . ';';
+        $js .= 'window.bwcovidnumbers["c' . $uid . '"] = chartConfig' . $uid . ';';
 
-        $pageRender->addJsInlineCode('bwcovidnumbers', $js, true, true);
+        $pageRender->addJsInlineCode('bwcovidnumbers' . $uid, $js, true, true);
 
-        return '<canvas id="myChart" width="400" height="150"></canvas>';
+        return '<canvas id="chart-' . $uid . '" width="400" height="150"></canvas>';
     }
 
     /**
