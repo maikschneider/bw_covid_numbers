@@ -71,7 +71,7 @@
 							<label>
 								LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state
 							</label>
-							<displayCond>FIELD:settings.filterMode:=:0</displayCond>
+							<displayCond>FIELD:settings.filterMode:!=:1</displayCond>
 							<config>
 								<type>select</type>
 								<renderType>selectSingle</renderType>
