@@ -6,6 +6,8 @@ This TYPO3 extensions displays data about COVID-19 (Coronavirus SARS-CoV-2) from
 
 ![Example chart](Documentation/Images/example.png)
 
+![Example chart 2](Documentation/Images/example2.png)
+
 ## Installation
 
 * Get the extension
@@ -16,13 +18,32 @@ This TYPO3 extensions displays data about COVID-19 (Coronavirus SARS-CoV-2) from
 
 ## Usage
 
-Add the new plugin "COVID-19 numbers" to any page and set up your desired filter options in plugin settings.
+Add the new plugin "COVID-19 numbers" to any page and set up your desired output data in plugin settings.
 
 Add a new scheduler task to clear the cache and get daily new numbers.
 
-## Developer
+## Style
 
-To customize the graph, have look at the ```initChartJs.js```. This file gets included via ```plugin.tx_bwcovidnumbers_pi1.settings.initChartJs```.
+You can customize the style of the bar and line chart by setting the dataset properties of chart.js via TypoScript:
+
+```
+plugin.tx_bwcovidnumbers_pi1.settings {
+    datasetOptions {
+        line {
+            pointRadius = 0
+            pointHoverRadius = 10
+            steppedLine = true
+            # For more options see: https://www.chartjs.org/docs/latest/charts/line.html#dataset-properties 
+        }
+        bar {
+            borderWidth = 0
+            hoverBackgroundColor = rgba(0,0,0,0.5)
+        }
+    }
+}
+```
+
+To change the onload of the charts, have look at the ```initChartJs.js```. This file gets included via ```plugin.tx_bwcovidnumbers_pi1.settings.initChartJs```.
 
 ## ToDos
 
