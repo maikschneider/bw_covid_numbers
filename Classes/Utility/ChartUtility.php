@@ -1,4 +1,5 @@
 <?php
+
 namespace Blueways\BwCovidNumbers\Utility;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -12,9 +13,29 @@ class ChartUtility
      */
     public $settings;
 
+    /**
+     * @var array
+     */
+    public $labels;
+
     public function __construct($settings)
     {
         $this->settings = $settings;
+        $this->labels = [];
+    }
+
+    public function getChartConfig()
+    {
+        $datasets = $this->getChartDataSets();
+
+        return [
+            'type' => 'bar',
+            'data' => [
+                'datasets' => $datasets,
+                'labels' => $this->labels
+            ],
+            'options' => []
+        ];
     }
 
     public function getChartDataSets()
@@ -36,10 +57,22 @@ class ChartUtility
         $where = $this->getWhereStatementFromTcaItem($tca);
         $dataOverTime = RkiClientUtility::getTransformedData($where);
 
+        // add labels once
+        if (empty($this->labels)) {
+            foreach ($dataOverTime as $key => $day) {
+                $date = date('d.m.', $key / 1000);
+                $this->labels[] = $date;
+            }
+        }
+
         // cut data
         if ((int)$this->settings['filterTime'] > 0) {
             $offset = count($dataOverTime) - (int)$this->settings['filterTime'];
             $dataOverTime = array_slice($dataOverTime, $offset);
+            // cut labels once
+            if (count($this->labels) !== (int)$this->settings['filterTime']) {
+                $this->labels = array_slice($this->labels, $offset);
+            }
         }
 
         // fill in data
@@ -53,7 +86,7 @@ class ChartUtility
 
         // get settings for style
         $label = $this->guessDatasetLabelForTcaItem($tca);
-        $hexColor = $tca[$firstArrayKey]['color'];
+        $hexColor = $tca[$firstArrayKey]['color'] !== '' ? $tca[$firstArrayKey]['color'] : '#000000';
         list($r, $g, $b) = sscanf($hexColor, "#%02x%02x%02x");
         $graphType = (int)$tca[$firstArrayKey]['graphType'] === 1 ? 'bar' : 'line';
         $backgroundColor = 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $this->settings['datasetOptions'][$graphType]['backgroundColorOpacity'] . ')';

@@ -20,59 +20,18 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         $this->includeChartAssets();
 
+        // get chart data
+        /** @var ChartUtility $chartUtil */
         $chartUtil = GeneralUtility::makeInstance(ChartUtility::class, $this->settings);
-
-        $datasets = $chartUtil->getChartDataSets();
-
-        $where = $this->getWhereStatement();
-        $dataOverTime = $this->getTransformedData($where);
-
-        // rename array keys
-        foreach ($dataOverTime as $key => $day) {
-            $date = date('d.m.', $key / 1000);
-            $dataOverTime[$date] = $day;
-            unset($dataOverTime[$key]);
-        }
-
-        // cut data
-        if ((int)$this->settings['filterTime'] > 0) {
-            $offset = count($dataOverTime) - (int)$this->settings['filterTime'];
-            $dataOverTime = array_slice($dataOverTime, $offset);
-        }
-
-        // translation
-        $llService = $this->getLanguageService();
-
-        // create chart.js dataset & label
-        $dataset1label = $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:chart.dataset1.label');
-        $dataset1data = [];
-
-        $dataset2label = $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:chart.dataset2.label');
-        $dataset2data = [];
-
-        $labels = [];
-
-        // fill in data
-        foreach ($dataOverTime as $key => $day) {
-            $dataset1data[] = $day['AnzahlFall'];
-            $dataset2data[] = $day['avg'];
-            $labels[] = $key;
-        }
+        $chartConfig = $chartUtil->getChartConfig();
 
         // get unique id to display multiple elements on one page
         $uid = $this->configurationManager->getContentObject() ? $this->configurationManager->getContentObject()->data['uid'] : mt_rand(0,
             99999);
 
         // create global variables
-        $js = '';
-        $js .= 'const chartConfig' . $uid . ' = {};';
-        $js .= 'chartConfig' . $uid . '.dataset1data = ' . json_encode($dataset1data) . ';';
-        $js .= 'chartConfig' . $uid . '.dataset1label = "' . $dataset1label . '";';
-        $js .= 'chartConfig' . $uid . '.dataset2data = ' . json_encode($dataset2data) . ';';
-        $js .= 'chartConfig' . $uid . '.dataset2label = "' . $dataset2label . '";';
-        $js .= 'chartConfig' . $uid . '.labels = ' . json_encode($labels) . ';';
-        $js .= 'window.bwcovidnumbers = window.bwcovidnumbers || {}' . ';';
-        $js .= 'window.bwcovidnumbers["c' . $uid . '"] = chartConfig' . $uid . ';';
+        $js = 'window.bwcovidnumbers = window.bwcovidnumbers || {}' . ';';
+        $js .= 'window.bwcovidnumbers["c' . $uid . '"] = ' . json_encode($chartConfig) .';';
 
         /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRender */
         $pageRender = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
@@ -128,36 +87,5 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
 
         return $path;
-    }
-
-    public function getTransformedData($where)
-    {
-        return RkiClientUtility::getTransformedData($where);
-    }
-
-    /**
-     * @return LanguageService
-     */
-    private function getLanguageService()
-    {
-        return $GLOBALS['LANG'] ?: GeneralUtility::makeInstance(LanguageService::class);
-    }
-
-    /**
-     * Generate where statement from flexform settings
-     *
-     * @return string
-     */
-    private function getWhereStatement()
-    {
-        if ((int)$this->settings['filterMode'] === 0) {
-            return "IdBundesland='" . $this->settings['state'] . "'";
-        }
-
-        if (is_numeric($this->settings['district'])) {
-            return "IdLandkreis='" . $this->settings['district'] . "'";
-        }
-
-        return "Landkreis like '%" . $this->settings['district'] . "%'";
     }
 }

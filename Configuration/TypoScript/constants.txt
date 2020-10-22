@@ -12,7 +12,7 @@ plugin.tx_bwcovidnumbers_pi1 {
 			}
 
 			line {
-				backgroundColorOpacity = 0.1
+				backgroundColorOpacity = 0
 				borderColorOpacity = 0.9
 				borderWidth = 1
 			}
