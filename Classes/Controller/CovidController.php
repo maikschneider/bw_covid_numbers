@@ -2,6 +2,8 @@
 
 namespace Blueways\BwCovidNumbers\Controller;
 
+use Blueways\BwCovidNumbers\Utility\ChartUtility;
+use Blueways\BwCovidNumbers\Utility\RkiClientUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Lang\LanguageService;
@@ -16,37 +18,14 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     public function chartAction()
     {
-        /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRender */
-        $pageRender = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
-        if ($this->settings['chartsjs']['_typoScriptNodeValue']) {
+        $this->includeChartAssets();
 
-            $pageRender->addJsFooterLibrary('chartjs',
-                $this->getAssetPath($this->settings['chartsjs']['_typoScriptNodeValue']),
-                'text/javascript',
-                $this->settings['chartsjs']['compress'],
-                $this->settings['chartsjs']['forceOnTop'], $this->settings['chartsjs']['allWrap'],
-                $this->settings['chartsjs']['excludeFromConcatenation']);
-        }
+        $chartUtil = GeneralUtility::makeInstance(ChartUtility::class, $this->settings);
 
-        if ($this->settings['chartsjsCss']['_typoScriptNodeValue']) {
-            $pageRender->addCssFile(
-                $this->getAssetPath($this->settings['chartsjsCss']['_typoScriptNodeValue']),
-                'stylesheet',
-                'all',
-                'chartJs',
-                $this->settings['chartsjsCss']['compress'],
-                $this->settings['chartsjsCss']['forceOnTop'],
-                $this->settings['chartsjsCss']['allWrap'],
-                $this->settings['chartsjsCss']['excludeFromConcatenation']);
-        }
+        $datasets = $chartUtil->getChartDataSets();
 
-        if ($this->settings['initChartJs']) {
-            $pageRender->addJsFooterFile(
-                $this->getAssetPath($this->settings['initChartJs']),
-                'text/javascript');
-        }
-
-        $dataOverTime = $this->getTransformedData();
+        $where = $this->getWhereStatement();
+        $dataOverTime = $this->getTransformedData($where);
 
         // rename array keys
         foreach ($dataOverTime as $key => $day) {
@@ -83,7 +62,7 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         // get unique id to display multiple elements on one page
         $uid = $this->configurationManager->getContentObject() ? $this->configurationManager->getContentObject()->data['uid'] : mt_rand(0,
             99999);
-        
+
         // create global variables
         $js = '';
         $js .= 'const chartConfig' . $uid . ' = {};';
@@ -95,9 +74,44 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $js .= 'window.bwcovidnumbers = window.bwcovidnumbers || {}' . ';';
         $js .= 'window.bwcovidnumbers["c' . $uid . '"] = chartConfig' . $uid . ';';
 
+        /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRender */
+        $pageRender = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRender->addJsInlineCode('bwcovidnumbers' . $uid, $js, true, true);
 
         return '<canvas id="chart-' . $uid . '" width="400" height="150"></canvas>';
+    }
+
+    private function includeChartAssets()
+    {
+        /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRender */
+        $pageRender = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
+        if ($this->settings['chartsjs']['_typoScriptNodeValue']) {
+
+            $pageRender->addJsFooterLibrary('chartjs',
+                $this->getAssetPath($this->settings['chartsjs']['_typoScriptNodeValue']),
+                'text/javascript',
+                $this->settings['chartsjs']['compress'],
+                $this->settings['chartsjs']['forceOnTop'], $this->settings['chartsjs']['allWrap'],
+                $this->settings['chartsjs']['excludeFromConcatenation']);
+        }
+
+        if ($this->settings['chartsjsCss']['_typoScriptNodeValue']) {
+            $pageRender->addCssFile(
+                $this->getAssetPath($this->settings['chartsjsCss']['_typoScriptNodeValue']),
+                'stylesheet',
+                'all',
+                'chartJs',
+                $this->settings['chartsjsCss']['compress'],
+                $this->settings['chartsjsCss']['forceOnTop'],
+                $this->settings['chartsjsCss']['allWrap'],
+                $this->settings['chartsjsCss']['excludeFromConcatenation']);
+        }
+
+        if ($this->settings['initChartJs']) {
+            $pageRender->addJsFooterFile(
+                $this->getAssetPath($this->settings['initChartJs']),
+                'text/javascript');
+        }
     }
 
     /**
@@ -116,48 +130,17 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         return $path;
     }
 
-    public function getTransformedData()
+    public function getTransformedData($where)
     {
-        $where = $this->getWhereStatement();
-        $data = json_decode($this->getApiData($where), false);
-        $features = $data->features;
-        $dataOverTime = [];
+        return RkiClientUtility::getTransformedData($where);
+    }
 
-        // create array with day as index
-        foreach ($features as $key => $feature) {
-            $dataOverTime[$feature->attributes->Meldedatum]['AnzahlFall'] += $feature->attributes->AnzahlFall;
-        }
-
-        ksort($dataOverTime);
-        $previousReportIndex = -1;
-
-        // calculations for every day (sum, average,..)
-        foreach ($dataOverTime as $key => $day) {
-
-            // abort for first day
-            if ($previousReportIndex === -1) {
-                $previousReportIndex = $key;
-                $dataOverTime[$key]['sum'] = $day['AnzahlFall'];
-                continue;
-            }
-
-            // sum with previous day
-            $dataOverTime[$key]['sum'] = $dataOverTime[$previousReportIndex]['sum'] + $day['AnzahlFall'];
-
-            // calculate 7 day average
-            $keyMinus7Days = $key - 604800000;
-            $featuresOfLast7Days = array_filter($dataOverTime,
-                static function ($featureKey) use ($key, $keyMinus7Days) {
-                    return $featureKey > $keyMinus7Days && $featureKey <= $key;
-                }, ARRAY_FILTER_USE_KEY);
-            $dataOverTime[$key]['avg'] = round((array_reduce($featuresOfLast7Days, static function ($a, $b) {
-                    return $a + $b['AnzahlFall'];
-                }) / 7), 1);
-
-            $previousReportIndex = $key;
-        }
-
-        return $dataOverTime;
+    /**
+     * @return LanguageService
+     */
+    private function getLanguageService()
+    {
+        return $GLOBALS['LANG'] ?: GeneralUtility::makeInstance(LanguageService::class);
     }
 
     /**
@@ -176,27 +159,5 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
 
         return "Landkreis like '%" . $this->settings['district'] . "%'";
-    }
-
-    private function getApiData($whereStatement)
-    {
-        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
-        $cacheIdentifier = 'rkiData' . md5($whereStatement);
-        $where = urlencode($whereStatement);
-
-        if (($apiData = $cache->get($cacheIdentifier)) === false) {
-            $apiData = file_get_contents('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?where=' . $where . '&objectIds=&time=&resultType=none&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&sqlFormat=none&f=pjson&token=');
-            $cache->set($cacheIdentifier, $apiData, [], 82800);
-        }
-
-        return $apiData;
-    }
-
-    /**
-     * @return LanguageService
-     */
-    private function getLanguageService()
-    {
-        return $GLOBALS['LANG'] ?: GeneralUtility::makeInstance(LanguageService::class);
     }
 }

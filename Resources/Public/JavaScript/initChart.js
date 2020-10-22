@@ -11,7 +11,8 @@ function drawChart(uid, chartConfig) {
 				backgroundColor: 'rgba(108,190,191,0.1)',
 				borderColor: 'rgba(108,190,191,0.9)',
 				order: 2,
-				borderWidth: 1
+				borderWidth: 1,
+				type: 'bar'
 			}, {
 				data: chartConfig.dataset2data,
 				label: chartConfig.dataset2label,

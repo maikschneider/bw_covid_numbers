@@ -14,5 +14,19 @@ plugin.tx_bwcovidnumbers_pi1 {
 
 
 		initChartJs = {$plugin.tx_bwcovidnumbers_pi1.settings.initChartJs}
+
+		datasetOptions {
+			bar {
+				backgroundColorOpacity = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.bar.backgroundColorOpacity}
+				borderColorOpacity = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.bar.borderColorOpacity}
+				borderWidth = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.bar.borderWidth}
+			}
+
+			line {
+				backgroundColorOpacity = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.line.backgroundColorOpacity}
+				borderColorOpacity = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.line.borderColorOpacity}
+				borderWidth = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.line.borderWidth}
+			}
+		}
 	}
 }

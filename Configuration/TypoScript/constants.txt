@@ -3,5 +3,19 @@ plugin.tx_bwcovidnumbers_pi1 {
 		chartsjs = EXT:bw_covid_numbers/Resources/Public/JavaScript/Chart.bundle.min.js
 		initChartJs = EXT:bw_covid_numbers/Resources/Public/JavaScript/initChart.js
 		chartsjsCss = EXT:bw_covid_numbers/Resources/Public/Css/Chart.min.css
+
+		datasetOptions {
+			bar {
+				backgroundColorOpacity = 0.1
+				borderColorOpacity = 0.9
+				borderWidth = 1
+			}
+
+			line {
+				backgroundColorOpacity = 0.1
+				borderColorOpacity = 0.9
+				borderWidth = 1
+			}
+		}
 	}
 }

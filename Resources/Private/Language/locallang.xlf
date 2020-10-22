@@ -97,6 +97,36 @@
 			<trans-unit id="scheduler.description">
 				<source>Clear the cache table of Covid-19 numbers extension</source>
 			</trans-unit>
+			<trans-unit id="flexform.settings.graphs">
+				<source>Graphs</source>
+			</trans-unit>
+			<trans-unit id="flexform.settings.graph">
+				<source>Graph</source>
+			</trans-unit>
+			<trans-unit id="flexform.color">
+				<source>Color</source>
+			</trans-unit>
+			<trans-unit id="flexform.dataType">
+				<source>Data type</source>
+			</trans-unit>
+			<trans-unit id="flexform.dataType.1">
+				<source>Daily new infections</source>
+			</trans-unit>
+			<trans-unit id="flexform.dataType.2">
+				<source>Daily new infections (7-Days Ø)</source>
+			</trans-unit>
+			<trans-unit id="flexform.dataType.3">
+				<source>Number of infections</source>
+			</trans-unit>
+			<trans-unit id="flexform.graphType">
+				<source>Graph type</source>
+			</trans-unit>
+			<trans-unit id="flexform.graphType.1">
+				<source>Bar chart</source>
+			</trans-unit>
+			<trans-unit id="flexform.graphType.2">
+				<source>Line chart</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
