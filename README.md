@@ -20,6 +20,10 @@ This TYPO3 extensions displays data about COVID-19 (Coronavirus SARS-CoV-2) from
 
 Add the new plugin "COVID-19 numbers" to any page and set up your desired output data in plugin settings.
 
+![Add content element](Documentation/Images/contentElement.png)
+
+![Configure plugin settings](Documentation/Images/contentElement2.png)
+
 Add a new scheduler task to clear the cache and get daily new numbers.
 
 ## Style
@@ -38,6 +42,7 @@ plugin.tx_bwcovidnumbers_pi1.settings {
         bar {
             borderWidth = 0
             hoverBackgroundColor = rgba(0,0,0,0.5)
+            # For more options see: https://www.chartjs.org/docs/latest/charts/bar.html#dataset-properties
         }
     }
 }
@@ -47,7 +52,8 @@ To change the onload of the charts, have look at the ```initChartJs.js```. This 
 
 ## ToDos
 
-* Chart configuration inside plugin settings
-* German translation
+* Any wishes?
+
+## Contribute
 
 Feel free to contribute! [Bitbucket-Repository](https://bitbucket.org/blueways/bw_covid_numbers)
