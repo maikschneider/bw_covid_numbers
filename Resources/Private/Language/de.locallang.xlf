@@ -6,114 +6,151 @@
 		<body>
 			<trans-unit id="bwcovidnumbers_pi1.title">
 				<source>COVID-19 numbers</source>
+				<target>COVID-19 Zahlen</target>
 			</trans-unit>
 			<trans-unit id="bwcovidnumbers_pi1.description">
 				<source>Display number of corona virus cases in Germany</source>
+				<target>Zeigt die Anzahl an Corona-Infizierten in Deutschland</target>
 			</trans-unit>
 			<trans-unit id="flexform.sheetTitle">
 				<source>General settings</source>
+				<target>Allgemeine Einstellungen</target>
 			</trans-unit>
 			<trans-unit id="state">
 				<source>State</source>
+				<target>Bundesland</target>
 			</trans-unit>
 			<trans-unit id="district">
 				<source>District</source>
+				<target>Landkreis</target>
 			</trans-unit>
 			<trans-unit id="state.1">
 				<source>Schleswig-Holstein</source>
+				<target>Schleswig-Holstein</target>
 			</trans-unit>
 			<trans-unit id="state.2">
 				<source>Hamburg</source>
+				<target>Hamburg</target>
 			</trans-unit>
 			<trans-unit id="state.3">
-				<source>Lower Saxony</source>
+				<source>Niedersachsen</source>
+				<target>Niedersachsen</target>
 			</trans-unit>
 			<trans-unit id="state.4">
 				<source>Bremen</source>
+				<target>Bremen</target>
 			</trans-unit>
 			<trans-unit id="state.5">
-				<source>North Rhine-Westphalia</source>
+				<source>Nordrhein-Westfalen</source>
+				<target>Nordrhein-Westfalen</target>
 			</trans-unit>
 			<trans-unit id="state.6">
-				<source>Hesse</source>
+				<source>Hessen</source>
+				<target>Hessen</target>
 			</trans-unit>
 			<trans-unit id="state.7">
-				<source>Rhineland-Palatinate</source>
+				<source>Rheinland-Pfalz</source>
+				<target>Rheinland-Pfalz</target>
 			</trans-unit>
 			<trans-unit id="state.8">
 				<source>Baden-Württemberg</source>
+				<target>Baden-Württemberg</target>
 			</trans-unit>
 			<trans-unit id="state.9">
-				<source>Bavaria</source>
+				<source>Bayern</source>
+				<target>Bayern</target>
 			</trans-unit>
 			<trans-unit id="state.10">
 				<source>Saarland</source>
+				<target>Saarland</target>
 			</trans-unit>
 			<trans-unit id="state.11">
 				<source>Berlin</source>
+				<target>Berlin</target>
 			</trans-unit>
 			<trans-unit id="state.12">
 				<source>Brandenburg</source>
+				<target>Brandenburg</target>
 			</trans-unit>
 			<trans-unit id="state.13">
 				<source>Mecklenburg-Vorpommern</source>
+				<target>Mecklenburg-Vorpommern</target>
 			</trans-unit>
 			<trans-unit id="state.14">
-				<source>Saxony</source>
+				<source>Sachsen</source>
+				<target>Sachsen</target>
 			</trans-unit>
 			<trans-unit id="state.15">
-				<source>Saxony-Anhalt</source>
+				<source>Sachsen-Anhalt</source>
+				<target>Sachsen-Anhalt</target>
 			</trans-unit>
 			<trans-unit id="state.16">
-				<source>Thuringia</source>
+				<source>Thüringen</source>
+				<target>Thüringen</target>
 			</trans-unit>
 			<trans-unit id="flexform.settings.district">
 				<source>District ID or name</source>
+				<target>Landkreisname oder ID</target>
 			</trans-unit>
 			<trans-unit id="flexform.settings.filterTime">
 				<source>Days to display</source>
+				<target>Anzahl Tage</target>
 			</trans-unit>
 			<trans-unit id="chart.dataset1.label">
 				<source>Daily new infections</source>
+				<target>Tägliche Neuinfektionen</target>
 			</trans-unit>
 			<trans-unit id="chart.dataset2.label">
 				<source>Daily new infections (7-Days Ø)</source>
+				<target>Tägliche Neuinfektionen (7-Tage Ø)</target>
 			</trans-unit>
 			<trans-unit id="scheduler.name">
 				<source>COVID-19 numbers cache</source>
+				<target>COVID-19 Zahlen Cache</target>
 			</trans-unit>
 			<trans-unit id="scheduler.description">
 				<source>Clear the cache table of Covid-19 numbers extension</source>
+				<target>Löscht die Cache-Tabelle von Covid-19 Zahlen</target>
 			</trans-unit>
 			<trans-unit id="flexform.settings.graphs">
 				<source>Graphs</source>
+				<target>Graphen</target>
 			</trans-unit>
 			<trans-unit id="flexform.settings.graph">
 				<source>Graph</source>
+				<target>Graph</target>
 			</trans-unit>
 			<trans-unit id="flexform.color">
 				<source>Color</source>
+				<target>Farbe</target>
 			</trans-unit>
 			<trans-unit id="flexform.dataType">
 				<source>Data type</source>
+				<target>Datentyp</target>
 			</trans-unit>
 			<trans-unit id="flexform.dataType.1">
 				<source>Daily new infections</source>
+				<target>Tägliche Neuinfektionen</target>
 			</trans-unit>
 			<trans-unit id="flexform.dataType.2">
 				<source>Daily new infections (7-Days Ø)</source>
+				<target>Tägliche Neuinfektionen (7-Tage Ø)</target>
 			</trans-unit>
 			<trans-unit id="flexform.dataType.3">
 				<source>Number of infections</source>
+				<target>Anzahl der Infizierten</target>
 			</trans-unit>
 			<trans-unit id="flexform.graphType">
 				<source>Graph type</source>
+				<target>Diagrammtyp</target>
 			</trans-unit>
 			<trans-unit id="flexform.graphType.1">
 				<source>Bar chart</source>
+				<target>Säulendiagramm</target>
 			</trans-unit>
 			<trans-unit id="flexform.graphType.2">
 				<source>Line chart</source>
+				<target>Liniendiagramm</target>
 			</trans-unit>
 		</body>
 	</file>
