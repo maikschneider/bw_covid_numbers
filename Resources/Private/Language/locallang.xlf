@@ -13,15 +13,6 @@
 			<trans-unit id="flexform.sheetTitle">
 				<source>General settings</source>
 			</trans-unit>
-			<trans-unit id="flexform.view">
-				<source>View</source>
-			</trans-unit>
-			<trans-unit id="flexform.view.chart">
-				<source>Chart</source>
-			</trans-unit>
-			<trans-unit id="flexform.view.chart">
-				<source>Chart</source>
-			</trans-unit>
 			<trans-unit id="state">
 				<source>State</source>
 			</trans-unit>

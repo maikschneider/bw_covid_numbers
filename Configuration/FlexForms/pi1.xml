@@ -9,24 +9,6 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
-					<switchableControllerActions>
-						<TCEforms>
-							<label>LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.view
-							</label>
-							<onChange>reload</onChange>
-							<config>
-								<type>select</type>
-								<items type="array">
-									<numIndex index="1" type="array">
-										<numIndex index="0">
-											LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.view.chart
-										</numIndex>
-										<numIndex index="1">Covid->chart</numIndex>
-									</numIndex>
-								</items>
-							</config>
-						</TCEforms>
-					</switchableControllerActions>
 					<settings.filterTime>
 						<TCEforms>
 							<label>
@@ -40,18 +22,6 @@
 							</config>
 						</TCEforms>
 					</settings.filterTime>
-					<settings.district>
-						<TCEforms>
-							<label>
-								LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.settings.district
-							</label>
-							<displayCond>FIELD:settings.filterMode:=:1</displayCond>
-							<config>
-								<type>input</type>
-								<eval>trim,required</eval>
-							</config>
-						</TCEforms>
-					</settings.district>
 					<settings.graphs type="array">
 						<section>1</section>
 						<type>array</type>
@@ -347,9 +317,7 @@
 														<JSopenParams>
 															height=750,width=380,status=1,menubar=1,scrollbars=1
 														</JSopenParams>
-														<exampleImg>
-															EXT:bw_covid_numbers/Resources/Public/Images/colorpicker.png
-														</exampleImg>
+														<exampleImg>EXT:bw_covid_numbers/Resources/Public/Images/colorpicker.png</exampleImg>
 													</colorChoice>
 												</wizards>
 											</config>

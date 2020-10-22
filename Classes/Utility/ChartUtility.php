@@ -2,6 +2,7 @@
 
 namespace Blueways\BwCovidNumbers\Utility;
 
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Lang\LanguageService;
 
@@ -26,16 +27,23 @@ class ChartUtility
 
     public function getChartConfig()
     {
-        $datasets = $this->getChartDataSets();
+        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
+        $cacheIdentifier = 'chartConfig' . md5(serialize($this->settings));
 
-        return [
-            'type' => 'bar',
-            'data' => [
-                'datasets' => $datasets,
-                'labels' => $this->labels
-            ],
-            'options' => []
-        ];
+        if (($chartConfig = $cache->get($cacheIdentifier)) === false) {
+            $datasets = $this->getChartDataSets();
+            $chartConfig = [
+                'type' => 'bar',
+                'data' => [
+                    'datasets' => $datasets,
+                    'labels' => $this->labels
+                ],
+                'options' => []
+            ];
+            $cache->set($cacheIdentifier, $chartConfig, [], 82800);
+        }
+
+        return $chartConfig;
     }
 
     public function getChartDataSets()
@@ -91,16 +99,22 @@ class ChartUtility
         $graphType = (int)$tca[$firstArrayKey]['graphType'] === 1 ? 'bar' : 'line';
         $backgroundColor = 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $this->settings['datasetOptions'][$graphType]['backgroundColorOpacity'] . ')';
         $borderColor = 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $this->settings['datasetOptions'][$graphType]['borderColorOpacity'] . ')';
-        $borderWidth = $this->settings['datasetOptions'][$graphType]['borderWidth'];
 
-        return [
+        $dataset = [
             'data' => $data,
             'label' => $label,
             'type' => $graphType,
             'backgroundColor' => $backgroundColor,
-            'borderColor' => $borderColor,
-            'borderWidth' => $borderWidth
+            'borderColor' => $borderColor
         ];
+
+        // override with typoScript settings
+        ArrayUtility::mergeRecursiveWithOverrule($dataset, $this->settings['datasetOptions'][$graphType]);
+
+        // remove custom properties (not in chart.js config)
+        unset($dataset['backgroundColorOpacity'], $dataset['borderColorOpacity']);
+
+        return $dataset;
     }
 
     /**
@@ -114,17 +128,17 @@ class ChartUtility
             return "IdBundesland='" . $tca['state']['IdBundesland'] . "'";
         }
 
-        if (is_numeric($tca[0]['name'])) {
-            return "IdLandkreis='" . $tca['district']['name'] . "'";
+        if (is_numeric($tca[0]['IdLandkreis'])) {
+            return "IdLandkreis='" . $tca['district']['IdLandkreis'] . "'";
         }
 
-        return "Landkreis like '%" . $tca['district']['name'] . "%'";
+        return "Landkreis like '%" . $tca['district']['IdLandkreis'] . "%'";
     }
 
     private function guessDatasetLabelForTcaItem($tca)
     {
         $firstArrayKey = array_keys($tca)[0];
-        $dataType = $tca[$firstArrayKey]['dataType'];
+        $dataType = (int)$tca[$firstArrayKey]['dataType'];
 
         // 1. default label is data type
         $llService = $this->getLanguageService();
@@ -133,11 +147,11 @@ class ChartUtility
         // 2. set specific label of Bundesland or City (in case only dataType 1 or 2, e.g. 7 cities in comparison)
         $otherDataTypesInGraph = count(array_filter($this->settings['graphs'],
                 static function ($graph) use ($dataType) {
-                    return array_pop($graph)['dataType'] !== $dataType;
+                    return (int)array_pop($graph)['dataType'] !== $dataType;
                 })) > 0;
 
         if (!$otherDataTypesInGraph && count($this->settings['graphs']) > 1) {
-            return $firstArrayKey === 'state' ? $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state.' . $tca[$firstArrayKey]['IdBundesland']) : $tca[$firstArrayKey]['name'];
+            return $firstArrayKey === 'state' ? $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state.' . $tca[$firstArrayKey]['IdBundesland']) : $tca[$firstArrayKey]['IdLandkreis'];
         }
 
         return $label;

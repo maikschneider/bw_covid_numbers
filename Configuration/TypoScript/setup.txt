@@ -12,7 +12,6 @@ plugin.tx_bwcovidnumbers_pi1 {
 		chartsjsCss.allWrap =
 		chartsjsCss.excludeFromConcatenation = 0
 
-
 		initChartJs = {$plugin.tx_bwcovidnumbers_pi1.settings.initChartJs}
 
 		datasetOptions {
@@ -20,12 +19,14 @@ plugin.tx_bwcovidnumbers_pi1 {
 				backgroundColorOpacity = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.bar.backgroundColorOpacity}
 				borderColorOpacity = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.bar.borderColorOpacity}
 				borderWidth = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.bar.borderWidth}
+				# For more options see: https://www.chartjs.org/docs/latest/charts/bar.html#dataset-properties
 			}
 
 			line {
 				backgroundColorOpacity = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.line.backgroundColorOpacity}
 				borderColorOpacity = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.line.borderColorOpacity}
 				borderWidth = {$plugin.tx_bwcovidnumbers_pi1.settings.datasetOptions.line.borderWidth}
+				# For more options see: https://www.chartjs.org/docs/latest/charts/line.html#dataset-properties
 			}
 		}
 	}
