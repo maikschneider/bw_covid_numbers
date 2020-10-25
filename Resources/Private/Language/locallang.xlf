@@ -106,6 +106,9 @@
 			<trans-unit id="flexform.dataType.3">
 				<source>Number of infections</source>
 			</trans-unit>
+			<trans-unit id="flexform.dataType.4">
+				<source>Number of infections (7-Days Σ/100.000)</source>
+			</trans-unit>
 			<trans-unit id="flexform.graphType">
 				<source>Graph type</source>
 			</trans-unit>

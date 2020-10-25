@@ -72,13 +72,12 @@ class ChartUtility
 
     private function getDatasetForTcaItem($tca)
     {
-        $where = $this->getWhereStatementFromTcaItem($tca);
-        $dataOverTime = RkiClientUtility::getTransformedData($where);
+        $dataOverTime = RkiClientUtility::getTransformedData($tca);
 
         // fill in data
         $data = [];
         $firstArrayKey = array_keys($tca)[0];
-        $dataTypeMapping = [1 => 'AnzahlFall', 2 => 'avg', 3 => 'sum'];
+        $dataTypeMapping = [1 => 'AnzahlFall', 2 => 'avg', 3 => 'sum', 4 => 'week'];
         $dataOffset = $dataTypeMapping[$tca[$firstArrayKey]['dataType']];
         foreach ($dataOverTime as $key => $day) {
             $data[$key] = $day[$dataOffset];
@@ -107,25 +106,7 @@ class ChartUtility
         unset($dataset['backgroundColorOpacity'], $dataset['borderColorOpacity']);
 
         return $dataset;
-    }
-
-    /**
-     * Generate where statement from flexform settings
-     *
-     * @return string
-     */
-    private function getWhereStatementFromTcaItem($tca)
-    {
-        if (array_keys($tca)[0] === 'state') {
-            return "IdBundesland='" . $tca['state']['IdBundesland'] . "'";
-        }
-
-        if (is_numeric($tca['district']['IdLandkreis'])) {
-            return "IdLandkreis='" . $tca['district']['IdLandkreis'] . "'";
-        }
-
-        return "Landkreis like '%" . $tca['district']['IdLandkreis'] . "%'";
-    }
+}
 
     private function guessDatasetLabelForTcaItem($tca)
     {

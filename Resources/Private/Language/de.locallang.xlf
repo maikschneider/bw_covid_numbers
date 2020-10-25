@@ -136,6 +136,10 @@
 				<source>Daily new infections (7-Days Ø)</source>
 				<target>Tägliche Neuinfektionen (7-Tage Ø)</target>
 			</trans-unit>
+			<trans-unit id="flexform.dataType.4">
+				<source>Number of infections (Σ 7-Days / 100.000)</source>
+				<target>Anzahl der Infizierten (7-Tage Σ/100.000 EW)</target>
+			</trans-unit>
 			<trans-unit id="flexform.dataType.3">
 				<source>Number of infections</source>
 				<target>Anzahl der Infizierten</target>
