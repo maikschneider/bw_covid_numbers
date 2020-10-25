@@ -137,6 +137,7 @@ class ChartUtility
         }
 
         if (is_numeric($tca[0]['IdLandkreis'])) {
+        if (is_numeric($tca['district']['IdLandkreis'])) {
             return "IdLandkreis='" . $tca['district']['IdLandkreis'] . "'";
         }
 
