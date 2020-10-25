@@ -57,7 +57,7 @@ class RkiClientUtility
         $where = urlencode($whereStatement);
 
         if (($apiData = $cache->get($cacheIdentifier)) === false) {
-            $apiData = file_get_contents('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?where=' . $where . '&objectIds=&time=&resultType=none&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&sqlFormat=none&f=pjson&token=');
+            $apiData = file_get_contents('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?where=' . $where . '&outStatistics=[{"statisticType":"sum","onStatisticField":"AnzahlFall","outStatisticFieldName":"AnzahlFall"}]&groupByFieldsForStatistics=Meldedatum&sqlFormat=none&f=pjson&token=');
             $cache->set($cacheIdentifier, $apiData, [], 82800);
         }
 
