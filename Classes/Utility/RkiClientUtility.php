@@ -58,7 +58,7 @@ class RkiClientUtility
 
         // try from cache
         if (($population = $cache->get($cacheIdentifier))) {
-            // return $population;
+            return $population;
         }
 
         // get for state
