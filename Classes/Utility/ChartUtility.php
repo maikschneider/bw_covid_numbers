@@ -65,6 +65,8 @@ class ChartUtility
             $datasets[] = $this->getDatasetForTcaItem($tca);
         }
 
+        $datasets = $this->cutAndSyncDatasets($datasets);
+
         return $datasets;
     }
 
@@ -73,31 +75,13 @@ class ChartUtility
         $where = $this->getWhereStatementFromTcaItem($tca);
         $dataOverTime = RkiClientUtility::getTransformedData($where);
 
-        // add labels once
-        if (empty($this->labels)) {
-            foreach ($dataOverTime as $key => $day) {
-                $date = date('d.m.', $key / 1000);
-                $this->labels[] = $date;
-            }
-        }
-
-        // cut data
-        if ((int)$this->settings['filterTime'] > 0) {
-            $offset = count($dataOverTime) - (int)$this->settings['filterTime'];
-            $dataOverTime = array_slice($dataOverTime, $offset);
-            // cut labels once
-            if (count($this->labels) !== (int)$this->settings['filterTime']) {
-                $this->labels = array_slice($this->labels, $offset);
-            }
-        }
-
         // fill in data
         $data = [];
         $firstArrayKey = array_keys($tca)[0];
         $dataTypeMapping = [1 => 'AnzahlFall', 2 => 'avg', 3 => 'sum'];
         $dataOffset = $dataTypeMapping[$tca[$firstArrayKey]['dataType']];
         foreach ($dataOverTime as $key => $day) {
-            $data[] = $day[$dataOffset];
+            $data[$key] = $day[$dataOffset];
         }
 
         // get settings for style
@@ -136,7 +120,6 @@ class ChartUtility
             return "IdBundesland='" . $tca['state']['IdBundesland'] . "'";
         }
 
-        if (is_numeric($tca[0]['IdLandkreis'])) {
         if (is_numeric($tca['district']['IdLandkreis'])) {
             return "IdLandkreis='" . $tca['district']['IdLandkreis'] . "'";
         }
@@ -172,5 +155,41 @@ class ChartUtility
     private function getLanguageService()
     {
         return $GLOBALS['LANG'] ?: GeneralUtility::makeInstance(LanguageService::class);
+    }
+
+    private function cutAndSyncDatasets($datasets)
+    {
+        // gather all dates from all datasets
+        $allPointsInTime = [];
+        foreach ($datasets as $set) {
+            $allPointsInTime = array_merge($allPointsInTime, array_keys($set['data']));
+        }
+
+        // fill empty values for new points in time with empty values
+        foreach ($datasets as $key => $set) {
+
+            foreach ($allPointsInTime as $pointInTime) {
+                if (!array_key_exists($pointInTime, $set['data'])) {
+                    $datasets[$key]['data'][$pointInTime] = null;
+                }
+            }
+
+            ksort($datasets[$key]['data']);
+        }
+
+        // fill labels
+        foreach (array_keys($datasets[0]['data']) as $date) {
+            $date = date('d.m.', $date / 1000);
+            $this->labels[] = $date;
+        }
+
+        // always cut data and labels (to reset the array index from timestamp to increasing numbers)
+        $offset = ((int)$this->settings['filterTime'] > 0) ? count($this->labels) - (int)$this->settings['filterTime'] : 0;
+        foreach ($datasets as $key => $set) {
+            $datasets[$key]['data'] = array_slice($set['data'], $offset);
+        }
+        $this->labels = array_slice($this->labels, $offset);
+
+        return $datasets;
     }
 }
