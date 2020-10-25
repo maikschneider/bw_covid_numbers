@@ -53,8 +53,7 @@ class RkiClientUtility
     public static function getPopulationFromTcaItem($tca)
     {
         $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
-        $cacheIdentifier = 'populationData';
-        //$cacheIdentifier .= array_keys($tca)[0] === 'state' ? 'state' . $tca['state']['IdBundesland'] : $tca['district']['IdBundIdLandkreisesland'];
+        $cacheIdentifier = 'populationData' . array_keys($tca)[0] === 'state' ? 'state' . $tca['state']['IdBundesland'] : $tca['district']['IdLandkreis'];
 
         // try from cache
         if (($population = $cache->get($cacheIdentifier))) {
@@ -132,6 +131,8 @@ class RkiClientUtility
 
     public static function calc7DayWeek($date, $dataOverTime, $population)
     {
+        $populationFactor = round($population / 100000, 3);
+
         $keyMinus7Days = $date - 604800000;
         $featuresOfLast7Days = array_filter($dataOverTime,
             static function ($featureKey) use ($date, $keyMinus7Days) {
@@ -139,6 +140,6 @@ class RkiClientUtility
             }, ARRAY_FILTER_USE_KEY);
         return round((array_reduce($featuresOfLast7Days, static function ($a, $b) {
                 return $a + $b['AnzahlFall'];
-            }) / ($population / 100000)), 1);
+            }) / $populationFactor), 1);
     }
 }
