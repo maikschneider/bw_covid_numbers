@@ -53,7 +53,7 @@ class RkiClientUtility
     public static function getPopulationFromTcaItem($tca)
     {
         $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
-        $cacheIdentifier = 'populationData' . array_keys($tca)[0] === 'state' ? 'state' . $tca['state']['IdBundesland'] : $tca['district']['IdLandkreis'];
+        $cacheIdentifier = 'populationData' . md5(array_keys($tca)[0] === 'state' ? 'state' . $tca['state']['IdBundesland'] : $tca['district']['IdLandkreis']);
 
         // try from cache
         if (($population = $cache->get($cacheIdentifier))) {
