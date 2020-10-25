@@ -37,7 +37,7 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $pageRender = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRender->addJsInlineCode('bwcovidnumbers' . $uid, $js, true, true);
 
-        return '<canvas id="chart-' . $uid . '" width="400" height="150"></canvas>';
+        return '<canvas id="chart-' . $uid . '" width="400"></canvas>';
     }
 
     private function includeChartAssets()

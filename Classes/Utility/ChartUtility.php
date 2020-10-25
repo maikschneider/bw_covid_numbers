@@ -31,19 +31,27 @@ class ChartUtility
         $cacheIdentifier = 'chartConfig' . md5(serialize($this->settings));
 
         if (($chartConfig = $cache->get($cacheIdentifier)) === false) {
-            $datasets = $this->getChartDataSets();
-            $chartConfig = [
-                'type' => 'bar',
-                'data' => [
-                    'datasets' => $datasets,
-                    'labels' => $this->labels
-                ],
-                'options' => []
-            ];
+            $chartConfig = $this->constructChartConfig();
             $cache->set($cacheIdentifier, $chartConfig, [], 82800);
         }
 
         return $chartConfig;
+    }
+
+    public function constructChartConfig()
+    {
+        $datasets = $this->getChartDataSets();
+        $labels = $this->labels;
+        $options = $this->settings['chartOptions'];
+
+        return [
+            'type' => 'bar',
+            'data' => [
+                'datasets' => $datasets,
+                'labels' => $labels
+            ],
+            'options' => $options
+        ];
     }
 
     public function getChartDataSets()

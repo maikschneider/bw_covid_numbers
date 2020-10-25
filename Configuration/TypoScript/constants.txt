@@ -17,5 +17,9 @@ plugin.tx_bwcovidnumbers_pi1 {
 				borderWidth = 1
 			}
 		}
+
+		chartOptions {
+			aspectRatio = 3
+		}
 	}
 }

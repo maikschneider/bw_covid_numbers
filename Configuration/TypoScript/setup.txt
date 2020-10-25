@@ -29,5 +29,12 @@ plugin.tx_bwcovidnumbers_pi1 {
 				# For more options see: https://www.chartjs.org/docs/latest/charts/line.html#dataset-properties
 			}
 		}
+
+		chartOptions {
+			aspectRatio = {$plugin.tx_bwcovidnumbers_pi1.settings.chartOptions.aspectRatio}
+			# For more options see:
+			# https://www.chartjs.org/docs/latest/general/options.html
+			# https://www.chartjs.org/docs/latest/general/responsive.html
+		}
 	}
 }
