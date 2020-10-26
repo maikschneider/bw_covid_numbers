@@ -2,120 +2,11 @@
 
 namespace Blueways\BwCovidNumbers\Utility;
 
+use Blueways\BwCovidNumbers\Domain\Model\Dto\Graph;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class RkiClientUtility
 {
-
-    public static function getTransformedData($tca)
-    {
-        $population = self::getPopulationFromTcaItem($tca);
-
-        $where = self::getCovidWhereStatementFromTcaItem($tca);
-        $data = json_decode(self::getApiData($where), false);
-
-        $features = $data->features;
-        $dataOverTime = [];
-
-        // create array with day as index
-        foreach ($features as $key => $feature) {
-            $dataOverTime[$feature->attributes->Meldedatum]['AnzahlFall'] += $feature->attributes->AnzahlFall;
-        }
-
-        ksort($dataOverTime);
-        $previousReportIndex = -1;
-
-        // calculations for every day (sum, average,..)
-        foreach ($dataOverTime as $key => $day) {
-
-            // abort for first day
-            if ($previousReportIndex === -1) {
-                $previousReportIndex = $key;
-                $dataOverTime[$key]['sum'] = $day['AnzahlFall'];
-                continue;
-            }
-
-            // sum with previous day
-            $dataOverTime[$key]['sum'] = $dataOverTime[$previousReportIndex]['sum'] + $day['AnzahlFall'];
-
-            // calculate 7 day average
-            $dataOverTime[$key]['avg'] = self::calc7DayAverage($key, $dataOverTime);
-
-            // calculate 7 per 100.000
-            $dataOverTime[$key]['week'] = self::calc7DayWeek($key, $dataOverTime, $population);
-
-            $previousReportIndex = $key;
-        }
-
-        return $dataOverTime;
-    }
-
-    public static function getPopulationFromTcaItem($tca)
-    {
-        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
-        $cacheIdentifier = 'populationData' . md5(array_keys($tca)[0] === 'state' ? 'state' . $tca['state']['IdBundesland'] : $tca['district']['IdLandkreis']);
-
-        // try from cache
-        if (($population = $cache->get($cacheIdentifier))) {
-            return $population;
-        }
-
-        // get for state
-        if (array_keys($tca)[0] === 'state') {
-            $url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/Coronaf%C3%A4lle_in_den_Bundesl%C3%A4ndern/FeatureServer/0/query?where=OBJECTID_1+%3D+11&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=";
-            $populationData = json_decode(file_get_contents($url));
-            $population = $populationData->features[0]->attributes->LAN_ew_EWZ;
-        }
-
-        // get for district
-        if (array_keys($tca)[0] !== 'state') {
-
-            $where = "GEN+like+%27%25" . $tca['district']['IdLandkreis'] . "%25%27";
-
-            if (is_numeric($tca['district']['IdLandkreis'])) {
-                $where = "RS=" . $tca['district']['IdLandkreis'];
-            }
-
-            $url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=" . $where . "&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=";
-            $populationData = json_decode(file_get_contents($url), true);
-            $population = $populationData['features'][0]['attributes']['EWZ'];
-        }
-
-        $cache->set($cacheIdentifier, $population, [], 82800000);
-        return $population;
-    }
-
-    /**
-     * Generate where statement from flexform settings
-     *
-     * @return string
-     */
-    public static function getCovidWhereStatementFromTcaItem($tca)
-    {
-        if (array_keys($tca)[0] === 'state') {
-            return "IdBundesland='" . $tca['state']['IdBundesland'] . "'";
-        }
-
-        if (is_numeric($tca['district']['IdLandkreis'])) {
-            return "IdLandkreis='" . $tca['district']['IdLandkreis'] . "'";
-        }
-
-        return "Landkreis like '%" . $tca['district']['IdLandkreis'] . "%'";
-    }
-
-    public static function getApiData($whereStatement)
-    {
-        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
-        $cacheIdentifier = 'rkiData' . md5($whereStatement);
-        $where = urlencode($whereStatement);
-
-        if (($apiData = $cache->get($cacheIdentifier)) === false) {
-            $apiData = file_get_contents('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?where=' . $where . '&outStatistics=[{"statisticType":"sum","onStatisticField":"AnzahlFall","outStatisticFieldName":"AnzahlFall"}]&groupByFieldsForStatistics=Meldedatum&sqlFormat=none&f=pjson&token=');
-            $cache->set($cacheIdentifier, $apiData, [], 82800);
-        }
-
-        return $apiData;
-    }
 
     public static function calc7DayAverage($date, $dataOverTime)
     {
@@ -141,5 +32,134 @@ class RkiClientUtility
         return round((array_reduce($featuresOfLast7Days, static function ($a, $b) {
                 return $a + $b['AnzahlFall'];
             }) / $populationFactor), 1);
+    }
+
+    public function updateGraphs(&$graphs)
+    {
+        /**
+         * @var integer $key
+         * @var Graph $graph
+         */
+        foreach ($graphs as $key => &$graph) {
+            $this->createDataOverTimeForGraph($graph);
+            $graph->population = $this->requestPopulationForGraph($graph);
+        }
+
+        unset($graph);
+
+        $this->syncGraphsDataOverTime($graphs);
+        $this->calculateGraphDataTypes($graphs);
+    }
+
+    public function createDataOverTimeForGraph(Graph $graph)
+    {
+        $features = $this->requestFeaturesForGraph($graph);
+
+        $dataOverTime = [];
+
+        // create array with day as index
+        foreach ($features as $key => $feature) {
+            $dataOverTime[$feature->attributes->Meldedatum]['AnzahlFall'] += $feature->attributes->AnzahlFall;
+        }
+
+        $graph->dataOverTime = $dataOverTime;
+    }
+
+    public function requestFeaturesForGraph(Graph $location)
+    {
+        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
+        $whereStatement = $location->getWhereStatementForCovidQuery();
+        $cacheIdentifier = 'rkiArData' . md5($whereStatement);
+        $where = urlencode($whereStatement);
+
+        if (($apiData = $cache->get($cacheIdentifier)) === false) {
+            $apiData = file_get_contents('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?where=' . $where . '&outStatistics=[{"statisticType":"sum","onStatisticField":"AnzahlFall","outStatisticFieldName":"AnzahlFall"}]&groupByFieldsForStatistics=Meldedatum&sqlFormat=none&f=pjson&token=');
+            $apiData = json_decode($apiData, false)->features;
+            $cache->set($cacheIdentifier, $apiData, [], 82800);
+        }
+
+        return $apiData;
+    }
+
+    private function syncGraphsDataOverTime($graphs)
+    {
+        // gather all dates from all graphs
+        $allPointsInTime = [];
+        /** @var Graph $graph */
+        foreach ($graphs as $graph) {
+            $allPointsInTime = array_merge($allPointsInTime, array_keys($graph->dataOverTime));
+        }
+
+        // fill empty values for new points in time with null
+        foreach ($graphs as $key => $graph) {
+
+            foreach ($allPointsInTime as $pointInTime) {
+                if (!array_key_exists($pointInTime, $graph->dataOverTime)) {
+                    $graph->dataOverTime[$pointInTime] = ['AnzahlFall' => 0];
+                }
+            }
+
+            ksort($graph->dataOverTime);
+        }
+    }
+
+    private function requestPopulationForGraph(Graph $graph)
+    {
+        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
+        $cacheIdentifier = $graph->getCacheIdentifierForPopulation();
+
+        // try from cache
+        if (($population = $cache->get($cacheIdentifier))) {
+            return $population;
+        }
+
+        // get for state
+        if ($graph->isState) {
+            $url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/Coronaf%C3%A4lle_in_den_Bundesl%C3%A4ndern/FeatureServer/0/query?where=OBJECTID_1+%3D+11&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=";
+            $populationData = json_decode(file_get_contents($url));
+            $population = $populationData->features[0]->attributes->LAN_ew_EWZ;
+        }
+
+        // get for district
+        if (!$graph->isState) {
+
+            $where = $graph->getWhereStatementForPopulationQuery();
+
+            $url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=" . $where . "&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=";
+            $populationData = json_decode(file_get_contents($url), true);
+            $population = $populationData['features'][0]['attributes']['EWZ'];
+        }
+
+        $cache->set($cacheIdentifier, $population, [], 82800000);
+
+        return $population;
+    }
+
+    private function calculateGraphDataTypes($graphs)
+    {
+        /** @var Graph $graph */
+        foreach ($graphs as $graph) {
+            $previousReportIndex = -1;
+            foreach ($graph->dataOverTime as $key => $day) {
+
+                // abort for first day
+                if ($previousReportIndex === -1) {
+                    $previousReportIndex = $key;
+                    $graph->dataOverTime[$key]['sum'] = $day['AnzahlFall'];
+                    continue;
+                }
+
+                // sum with previous day
+                $graph->dataOverTime[$key]['sum'] = $graph->dataOverTime[$previousReportIndex]['sum'] + $day['AnzahlFall'];
+
+                // calculate 7 day average
+                $graph->dataOverTime[$key]['avg'] = self::calc7DayAverage($key, $graph->dataOverTime);
+
+                // calculate 7 per 100.000
+                $graph->dataOverTime[$key]['week'] = self::calc7DayWeek($key, $graph->dataOverTime, $graph->population);
+
+                $previousReportIndex = $key;
+            }
+        }
     }
 }
