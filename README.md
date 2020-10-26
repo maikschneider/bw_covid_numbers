@@ -8,6 +8,20 @@ This TYPO3 extensions displays data about COVID-19 (Coronavirus SARS-CoV-2) from
 
 ![Example chart 2](Documentation/Images/example2.png)
 
+## Features
+
+Create your own graph with the data you like:
+
+* Compare cities or states in one graph
+* Display different corona virus numbers
+    * Number of infections
+    * Daily new infections
+    * Daily new infections (7-Days Ø)
+    * Incidence value: Number of infections (7-Days Σ/100.000)
+* Display as line or bar graph
+* Select color
+* Refresh data with scheduler
+
 ## Installation
 
 * Get the extension
@@ -45,6 +59,12 @@ plugin.tx_bwcovidnumbers_pi1.settings {
             # For more options see: https://www.chartjs.org/docs/latest/charts/bar.html#dataset-properties
         }
     }
+    chartOptions {
+        aspectRatio = 2
+        # For more options see:
+        # https://www.chartjs.org/docs/latest/general/options.html
+        # https://www.chartjs.org/docs/latest/general/responsive.html
+    }
 }
 ```
 
@@ -53,6 +73,10 @@ To change the onload of the charts, have look at the ```initChartJs.js```. This 
 ## ToDos
 
 * Any wishes?
+
+## Known issues
+
+* The color picker in TYPO3 v7 does not properly save the selected color. You need to enter the value by hand.
 
 ## Contribute
 
