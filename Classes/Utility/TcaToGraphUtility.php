@@ -20,7 +20,7 @@ class TcaToGraphUtility
     public static function createGraphFromTca($tca)
     {
         $graph = new Graph();
-        $graph->isState = array_key_first($tca) === 'state';
+        $graph->isState = key($tca) === 'state';
         $tca = array_pop($tca);
 
         $graph->dataType = (int)$tca['dataType'];
