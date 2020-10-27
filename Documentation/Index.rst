@@ -113,4 +113,3 @@ Contribute
 Feel free to contribute!
 
 * `Bitbucket-Repository <https://bitbucket.org/blueways/bw_covid_numbers/>`__
-
