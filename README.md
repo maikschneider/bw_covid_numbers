@@ -4,9 +4,9 @@ This TYPO3 extensions displays data about COVID-19 (Coronavirus SARS-CoV-2) from
 
 ## Example
 
-![Example chart](Documentation/Images/example.png)
+![Example chart](https://bitbucket.org/blueways/bw_covid_numbers/raw/1dbd68bbdf6200c72ce9226afce1be33f919f4db/Documentation/Images/example.png)
 
-![Example chart 2](Documentation/Images/example2.png)
+![Example chart 2](https://bitbucket.org/blueways/bw_covid_numbers/raw/1dbd68bbdf6200c72ce9226afce1be33f919f4db/Documentation/Images/example2.png)
 
 ## Features
 
@@ -34,9 +34,9 @@ Create your own graph with the data you like:
 
 Add the new plugin "COVID-19 numbers" to any page and set up your desired output data in plugin settings.
 
-![Add content element](Documentation/Images/contentElement.png)
+![Add content element](https://bitbucket.org/blueways/bw_covid_numbers/raw/1dbd68bbdf6200c72ce9226afce1be33f919f4db/Documentation/Images/contentElement.png)
 
-![Configure plugin settings](Documentation/Images/contentElement2.png)
+![Configure plugin settings](https://bitbucket.org/blueways/bw_covid_numbers/raw/1dbd68bbdf6200c72ce9226afce1be33f919f4db/Documentation/Images/contentElement2.png)
 
 Add a new scheduler task to clear the cache and get daily new numbers.
 
