@@ -22,6 +22,10 @@ class RkiClientUtility
 
     public static function calc7DayWeek($date, $dataOverTime, $population)
     {
+        if ($population === 0) {
+            return 0;
+        }
+
         $populationFactor = round($population / 100000, 3);
 
         $keyMinus7Days = $date - 604800000;
