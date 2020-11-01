@@ -99,12 +99,18 @@ You can customize the style of the bar and line chart by setting the dataset pro
 
    To change the onload of the charts, have look at the ``initChartJs.js``. This file gets included via ``plugin.tx_bwcovidnumbers_pi1.settings.initChartJs``.
 
+Known issues
+============
+
+* The color picker in TYPO3 v7 does not properly work with multiple flexform items: You need to save the plugin settings once before selected color becomes saved.
+
 Todos
 =====
 
 Possible improvements:
 
 * Canvas output via fluid template
+* better label generation
 
 
 Contribute

@@ -70,13 +70,16 @@ plugin.tx_bwcovidnumbers_pi1.settings {
 
 To change the onload of the charts, have look at the ```initChartJs.js```. This file gets included via ```plugin.tx_bwcovidnumbers_pi1.settings.initChartJs```.
 
-## ToDos
-
-* Any wishes?
-
 ## Known issues
 
 * The color picker in TYPO3 v7 does not properly save the selected color. You need to enter the value by hand.
+
+## ToDos
+
+Possible improvements:
+
+* Canvas output via fluid template
+* better label generation
 
 ## Contribute
 
