@@ -214,19 +214,7 @@
 											<config>
 												<type>input</type>
 												<size>10</size>
-												<wizards>
-													<colorChoice>
-														<type>colorbox</type>
-														<title>Colorpicker</title>
-														<module>
-															<name>wizard_colorpicker</name>
-														</module>
-														<JSopenParams>
-															height=750,width=380,status=1,menubar=1,scrollbars=1
-														</JSopenParams>
-														<exampleImg>EXT:bw_covid_numbers/Resources/Public/Images/colorpicker.png</exampleImg>
-													</colorChoice>
-												</wizards>
+												<renderType>colorpicker</renderType>
 											</config>
 										</TCEforms>
 									</color>
@@ -319,19 +307,7 @@
 											<config>
 												<type>input</type>
 												<size>10</size>
-												<wizards>
-													<colorChoice>
-														<type>colorbox</type>
-														<title>Colorpicker</title>
-														<module>
-															<name>wizard_colorpicker</name>
-														</module>
-														<JSopenParams>
-															height=750,width=380,status=1,menubar=1,scrollbars=1
-														</JSopenParams>
-														<exampleImg>EXT:bw_covid_numbers/Resources/Public/Images/colorpicker.png</exampleImg>
-													</colorChoice>
-												</wizards>
+												<renderType>colorPicker</renderType>
 											</config>
 										</TCEforms>
 									</color>

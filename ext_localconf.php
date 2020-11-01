@@ -39,3 +39,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\Blueways\BwCovi
     'description' => 'LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:scheduler.description',
     'additionalFields' => ''
 );
+
+// register flexForm manipulation hook for v7
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_befunc.php']['getFlexFormDSClass'][] = \Blueways\BwCovidNumbers\Hooks\FlexformManipulationHook::class;
