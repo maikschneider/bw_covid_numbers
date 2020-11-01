@@ -3,9 +3,10 @@
 namespace Blueways\BwCovidNumbers\Controller;
 
 use Blueways\BwCovidNumbers\Utility\ChartUtility;
-use Blueways\BwCovidNumbers\Utility\RkiClientUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Lang\LanguageService;
 
 /**
@@ -31,7 +32,7 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         // create global variables
         $js = 'window.bwcovidnumbers = window.bwcovidnumbers || {}' . ';';
-        $js .= 'window.bwcovidnumbers["c' . $uid . '"] = ' . json_encode($chartConfig) .';';
+        $js .= 'window.bwcovidnumbers["c' . $uid . '"] = ' . json_encode($chartConfig) . ';';
 
         /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRender */
         $pageRender = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
@@ -79,10 +80,20 @@ class CovidController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     private function getAssetPath($path)
     {
+
+        $version = VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::getNumericTypo3Version());
+
         if (strpos($path, 'EXT:') === 0) {
             $parts = explode('/', $path);
             unset($parts[0]);
-            $path = ExtensionManagementUtility::siteRelPath('bw_covid_numbers');
+
+            if ($version['version_main'] >= 10) {
+                $path = ExtensionManagementUtility::extPath('bw_covid_numbers');
+                $path = PathUtility::stripPathSitePrefix($path);
+            } else {
+                $path = ExtensionManagementUtility::siteRelPath('bw_covid_numbers');
+            }
+
             $path .= implode('/', $parts);
         }
 
