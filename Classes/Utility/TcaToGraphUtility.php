@@ -6,11 +6,16 @@ use Blueways\BwCovidNumbers\Domain\Model\Dto\Graph;
 
 class TcaToGraphUtility
 {
+
     public static function createGraphsFromTca($settings)
     {
         $graphs = [];
 
-        foreach($settings['graphs'] as $tca) {
+        if (!isset($settings['graphs']) || !is_array($settings['graphs'])) {
+            return $graphs;
+        }
+
+        foreach ($settings['graphs'] as $tca) {
             $graphs[] = self::createGraphFromTca($tca);
         }
 
@@ -32,7 +37,7 @@ class TcaToGraphUtility
             return $graph;
         }
 
-        if(is_numeric($tca['IdLandkreis'])) {
+        if (is_numeric($tca['IdLandkreis'])) {
             $graph->IdLandkreis = $tca['IdLandkreis'];
             return $graph;
         }
