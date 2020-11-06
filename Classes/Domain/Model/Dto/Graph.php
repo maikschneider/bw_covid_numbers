@@ -54,6 +54,11 @@ class Graph
      */
     public $graphType;
 
+    /**
+     * @var integer
+     */
+    public $dataSource;
+
     public function getWhereStatementForCovidQuery()
     {
         if ($this->isState) {
@@ -154,7 +159,16 @@ class Graph
                 })) > 0;
 
         if (!$otherDataTypesInGraph && count($settings['graphs']) > 1) {
-            return $this->isState ? $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state.' . $this->IdBundesland) : $this->Landkreis;
+
+            if ($this->isState) {
+                return $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state.' . $this->IdBundesland);
+            }
+
+            if ($this->dataSource === 2) {
+                return $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.' . $this->IdLandkreis);
+            }
+
+            return $this->Landkreis;
         }
 
         return $label;

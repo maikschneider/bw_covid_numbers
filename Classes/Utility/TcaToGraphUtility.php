@@ -15,16 +15,19 @@ class TcaToGraphUtility
             return $graphs;
         }
 
+        $dataSource = (int)$settings['dataSource'];
+
         foreach ($settings['graphs'] as $tca) {
-            $graphs[] = self::createGraphFromTca($tca);
+            $graphs[] = self::createGraphFromTca($tca, $dataSource);
         }
 
         return $graphs;
     }
 
-    public static function createGraphFromTca($tca)
+    public static function createGraphFromTca($tca, $dataSource)
     {
         $graph = new Graph();
+        $graph->dataSource = $dataSource;
         $graph->dataOverTime = [];
         $graph->isState = key($tca) === 'state';
         $tca = array_pop($tca);
@@ -34,7 +37,12 @@ class TcaToGraphUtility
         $graph->graphType = (int)$tca['graphType'];
 
         if ($graph->isState) {
-            $graph->IdBundesland = $tca['IdBundesland'];
+            $graph->IdBundesland = $dataSource === 1 ? $tca['IdBundesland'] : $tca['IdBundeslandLavst'];
+            return $graph;
+        }
+
+        if ($dataSource === 2) {
+            $graph->IdLandkreis = $tca['IdLandkreisLavst'];
             return $graph;
         }
 
