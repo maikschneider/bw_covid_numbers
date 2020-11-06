@@ -22,7 +22,7 @@ class RkiClientUtility
 
     public static function calc7DayWeek($date, $dataOverTime, $population)
     {
-        if ($population === 0) {
+        if (!$population || $population === 0) {
             return 0;
         }
 
