@@ -25,6 +25,7 @@ class TcaToGraphUtility
     public static function createGraphFromTca($tca)
     {
         $graph = new Graph();
+        $graph->dataOverTime = [];
         $graph->isState = key($tca) === 'state';
         $tca = array_pop($tca);
 

@@ -25,18 +25,33 @@ class ChartUtility
         $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
         $cacheIdentifier = 'chartConfig' . md5(serialize($this->settings));
 
-        if (($chartConfig = $cache->get($cacheIdentifier)) === false) {
+        //if (($chartConfig = $cache->get($cacheIdentifier)) === false) {
             $graphs = TcaToGraphUtility::createGraphsFromTca($this->settings);
-            /** @var \Blueways\BwCovidNumbers\Utility\RkiClientUtility $rkiUtil */
-            $rkiUtil = GeneralUtility::makeInstance(RkiClientUtility::class);
-            $rkiUtil->updateGraphs($graphs);
+            $this->updateGraphs($graphs);
             $chartConfig = $this->constructGraphConfig($graphs);
 
             $cache->set($cacheIdentifier, $chartConfig, [], 82800);
-        }
+        //}
 
         return $chartConfig;
     }
+
+    private function updateGraphs($graphs)
+    {
+        if((int)$this->settings['dataSource'] === 1) {
+            /** @var \Blueways\BwCovidNumbers\Utility\RkiClientUtility $rkiUtil */
+            $rkiUtil = GeneralUtility::makeInstance(RkiClientUtility::class);
+            $rkiUtil->updateGraphs($graphs);
+        }
+
+        if ((int)$this->settings['dataSource'] === 2) {
+            /** @var \Blueways\BwCovidNumbers\Utility\LavstClientUtility $lavstUtil */
+            $lavstUtil = GeneralUtility::makeInstance(LavstClientUtility::class);
+            $lavstUtil->updateGraphs($graphs);
+        }
+    }
+
+
 
     public function constructGraphConfig($graphs)
     {
