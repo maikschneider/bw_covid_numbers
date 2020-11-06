@@ -316,73 +316,73 @@
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.2
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">2</numIndex>
 													</numIndex>
 													<numIndex index="3" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.3
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">3</numIndex>
 													</numIndex>
 													<numIndex index="4" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.4
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">4</numIndex>
 													</numIndex>
 													<numIndex index="5" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.5
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">5</numIndex>
 													</numIndex>
 													<numIndex index="6" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.6
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">6</numIndex>
 													</numIndex>
 													<numIndex index="7" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.7
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">7</numIndex>
 													</numIndex>
 													<numIndex index="8" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.8
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">8</numIndex>
 													</numIndex>
 													<numIndex index="9" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.9
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">9</numIndex>
 													</numIndex>
 													<numIndex index="10" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.10
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">10</numIndex>
 													</numIndex>
 													<numIndex index="11" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.11
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">11</numIndex>
 													</numIndex>
 													<numIndex index="12" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.12
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">12</numIndex>
 													</numIndex>
 													<numIndex index="13" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.13
 														</numIndex>
-														<numIndex index="1">1</numIndex>
+														<numIndex index="1">13</numIndex>
 													</numIndex>
 												</items>
 											</config>
