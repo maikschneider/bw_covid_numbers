@@ -9,6 +9,32 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
+					<settings.dataSource>
+						<TCEforms>
+							<label>
+								LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.settings.dataSource
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectSingle</renderType>
+								<items>
+									<numIndex index="1" type="array">
+										<numIndex index="0">
+											LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.settings.dataSource.1
+										</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">
+											LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.settings.dataSource.2
+										</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>
+								</items>
+							</config>
+							<onChange>reload</onChange>
+						</TCEforms>
+					</settings.dataSource>
 					<settings.filterTime>
 						<TCEforms>
 							<label>
@@ -142,8 +168,29 @@
 													</numIndex>
 												</items>
 											</config>
+											<displayCond>FIELD:settings.dataSource:=:1</displayCond>
 										</TCEforms>
 									</IdBundesland>
+									<IdBundeslandLavst>
+										<TCEforms>
+											<label>
+												LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state
+											</label>
+											<config>
+												<type>select</type>
+												<renderType>selectSingle</renderType>
+												<items>
+													<numIndex index="15" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state.15
+														</numIndex>
+														<numIndex index="1">15</numIndex>
+													</numIndex>
+												</items>
+											</config>
+											<displayCond>FIELD:settings.dataSource:=:2</displayCond>
+										</TCEforms>
+									</IdBundeslandLavst>
 									<dataType>
 										<TCEforms>
 											<label>
@@ -179,8 +226,35 @@
 													</numIndex>
 												</items>
 											</config>
+											<displayCond>FIELD:settings.dataSource:=:1</displayCond>
 										</TCEforms>
 									</dataType>
+									<dataTypeLavst>
+										<TCEforms>
+											<label>
+												LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType
+											</label>
+											<config>
+												<type>select</type>
+												<renderType>selectSingle</renderType>
+												<items>
+													<numIndex index="4" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType.4
+														</numIndex>
+														<numIndex index="1">4</numIndex>
+													</numIndex>
+													<numIndex index="5" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType.5
+														</numIndex>
+														<numIndex index="1">5</numIndex>
+													</numIndex>
+												</items>
+											</config>
+											<displayCond>FIELD:settings.dataSource:=:2</displayCond>
+										</TCEforms>
+									</dataTypeLavst>
 									<graphType>
 										<TCEforms>
 											<label>
@@ -235,8 +309,107 @@
 												<type>input</type>
 												<eval>trim,required</eval>
 											</config>
+											<displayCond>FIELD:settings.dataSource:=:1</displayCond>
 										</TCEforms>
 									</IdLandkreis>
+									<IdLandkreisLavst>
+										<TCEforms>
+											<label>
+												LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:district
+											</label>
+											<config>
+												<type>select</type>
+												<renderType>selectSingle</renderType>
+												<items>
+													<numIndex index="0" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.0
+														</numIndex>
+														<numIndex index="1">0</numIndex>
+													</numIndex>
+													<numIndex index="1" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.1
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="2" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.2
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="3" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.3
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="4" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.4
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="5" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.5
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="6" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.6
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="7" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.7
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="8" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.8
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="9" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.9
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="10" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.10
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="11" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.11
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="12" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.12
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+													<numIndex index="13" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.13
+														</numIndex>
+														<numIndex index="1">1</numIndex>
+													</numIndex>
+												</items>
+											</config>
+											<displayCond>FIELD:settings.dataSource:=:2</displayCond>
+										</TCEforms>
+									</IdLandkreisLavst>
 									<dataType>
 										<TCEforms>
 											<label>
@@ -272,8 +445,35 @@
 													</numIndex>
 												</items>
 											</config>
+											<displayCond>FIELD:settings.dataSource:=:1</displayCond>
 										</TCEforms>
 									</dataType>
+									<dataTypeLavst>
+										<TCEforms>
+											<label>
+												LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType
+											</label>
+											<config>
+												<type>select</type>
+												<renderType>selectSingle</renderType>
+												<items>
+													<numIndex index="4" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType.4
+														</numIndex>
+														<numIndex index="1">4</numIndex>
+													</numIndex>
+													<numIndex index="5" type="array">
+														<numIndex index="0">
+															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType.5
+														</numIndex>
+														<numIndex index="1">5</numIndex>
+													</numIndex>
+												</items>
+											</config>
+											<displayCond>FIELD:settings.dataSource:=:2</displayCond>
+										</TCEforms>
+									</dataTypeLavst>
 									<graphType>
 										<TCEforms>
 											<label>

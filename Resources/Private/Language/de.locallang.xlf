@@ -144,6 +144,10 @@
 				<source>Number of infections</source>
 				<target>Anzahl der Infizierten</target>
 			</trans-unit>
+			<trans-unit id="flexform.dataType.5">
+				<source>Number of infections (per 100.000)</source>
+				<target>Anzahl Infektionen (pro 100.000 EW)</target>
+			</trans-unit>
 			<trans-unit id="flexform.graphType">
 				<source>Graph type</source>
 				<target>Diagrammtyp</target>
@@ -155,6 +159,10 @@
 			<trans-unit id="flexform.graphType.2">
 				<source>Line chart</source>
 				<target>Liniendiagramm</target>
+			</trans-unit>
+			<trans-unit id="flexform.settings.dataSource">
+				<source>Data source</source>
+				<target>Datenquelle</target>
 			</trans-unit>
 		</body>
 	</file>

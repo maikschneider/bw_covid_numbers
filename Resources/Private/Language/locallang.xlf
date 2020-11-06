@@ -85,6 +85,15 @@
 			<trans-unit id="scheduler.description">
 				<source>Clear the cache table of Covid-19 numbers extension</source>
 			</trans-unit>
+			<trans-unit id="flexform.settings.dataSource">
+				<source>Data source</source>
+			</trans-unit>
+			<trans-unit id="flexform.settings.dataSource.1">
+				<source>Robert Koch-Institut (RKI)</source>
+			</trans-unit>
+			<trans-unit id="flexform.settings.dataSource.2">
+				<source>Landesamt für Verbraucherschutz Sachsen-Anhalt (LAVST)</source>
+			</trans-unit>
 			<trans-unit id="flexform.settings.graphs">
 				<source>Graphs</source>
 			</trans-unit>
@@ -109,6 +118,9 @@
 			<trans-unit id="flexform.dataType.4">
 				<source>Number of infections (7-Days Σ/100.000)</source>
 			</trans-unit>
+			<trans-unit id="flexform.dataType.5">
+				<source>Number of infections (per 100.000)</source>
+			</trans-unit>
 			<trans-unit id="flexform.graphType">
 				<source>Graph type</source>
 			</trans-unit>
@@ -117,6 +129,48 @@
 			</trans-unit>
 			<trans-unit id="flexform.graphType.2">
 				<source>Line chart</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.0">
+				<source>Altmarkkreis Salzwedel</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.1">
+				<source>Anhalt-Bitterfeld</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.2">
+				<source>Börde</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.3">
+				<source>Burgenlandkreis</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.4">
+				<source>Harz</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.5">
+				<source>Jerichower Land</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.6">
+				<source>Mansfeld-Südharz</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.7">
+				<source>Saalekreis</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.8">
+				<source>Salzlandkreis</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.9">
+				<source>Stendal</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.10">
+				<source>Wittenberg</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.11">
+				<source>Dessau-Roßlau, Stadt</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.12">
+				<source>Halle (Saale), Stadt</source>
+			</trans-unit>
+			<trans-unit id="lavst.district.13">
+				<source>Magdeburg, Landeshauptstadt</source>
 			</trans-unit>
 		</body>
 	</file>
