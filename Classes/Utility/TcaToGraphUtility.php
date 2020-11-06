@@ -42,7 +42,8 @@ class TcaToGraphUtility
         }
 
         if ($dataSource === 2) {
-            $graph->IdLandkreis = $tca['IdLandkreisLavst'];
+            $graph->IdLandkreisLavst = (int)$tca['IdLandkreisLavst'];
+            $graph->IdLandkreis = self::getRkiIdFromLavstDistrict((int)$tca['IdLandkreisLavst']);
             return $graph;
         }
 
@@ -54,6 +55,28 @@ class TcaToGraphUtility
         $graph->Landkreis = $tca['IdLandkreis'];
 
         return $graph;
+    }
+
+    public static function getRkiIdFromLavstDistrict($lavstId)
+    {
+        $lavstRkiLandkreisMapping = [
+            11 => 15001,
+            12 => 15002,
+            13 => 15003,
+            3 => 15084,
+            7 => 15088,
+            8 => 15089,
+            1 => 15082,
+            2 => 15083,
+            6 => 15087,
+            0 => 15081,
+            4 => 15085,
+            10 => 15091,
+            5 => 15086,
+            9 => 15090
+        ];
+
+        return $lavstRkiLandkreisMapping[$lavstId];
     }
 
 }

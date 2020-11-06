@@ -59,6 +59,11 @@ class Graph
      */
     public $dataSource;
 
+    /**
+     * @var integer
+     */
+    public $IdLandkreisLavst;
+
     public function getWhereStatementForCovidQuery()
     {
         if ($this->isState) {
@@ -165,7 +170,7 @@ class Graph
             }
 
             if ($this->dataSource === 2) {
-                return $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.' . $this->IdLandkreis);
+                return $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.' . $this->IdLandkreisLavst);
             }
 
             return $this->Landkreis;

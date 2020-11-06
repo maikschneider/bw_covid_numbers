@@ -8,7 +8,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class RkiClientUtility
 {
 
-    private static function calcSumPer100k(int $key, array $dataOverTime, int $population)
+    public static function calcSumPer100k(int $key, array $dataOverTime, $population)
     {
         if(!$population || $population === 0) {
             return 0;
@@ -57,7 +57,7 @@ class RkiClientUtility
          */
         foreach ($graphs as $key => &$graph) {
             $this->createDataOverTimeForGraph($graph);
-            $graph->population = $this->requestPopulationForGraph($graph);
+            $graph->population = self::requestPopulationForGraph($graph);
         }
 
         unset($graph);
@@ -118,7 +118,7 @@ class RkiClientUtility
         }
     }
 
-    private function requestPopulationForGraph(Graph $graph)
+    public static function requestPopulationForGraph(Graph $graph)
     {
         $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
         $cacheIdentifier = $graph->getCacheIdentifierForPopulation();
@@ -130,7 +130,7 @@ class RkiClientUtility
 
         // get for state
         if ($graph->isState) {
-            $url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/Coronaf%C3%A4lle_in_den_Bundesl%C3%A4ndern/FeatureServer/0/query?where=OBJECTID_1+%3D+11&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=";
+            $url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/Coronaf%C3%A4lle_in_den_Bundesl%C3%A4ndern/FeatureServer/0/query?where=OBJECTID_1=".$graph->IdBundesland."&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=";
             $populationData = json_decode(file_get_contents($url));
             $population = $populationData->features[0]->attributes->LAN_ew_EWZ;
         }
