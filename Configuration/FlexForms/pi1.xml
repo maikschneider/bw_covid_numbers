@@ -224,26 +224,6 @@
 														</numIndex>
 														<numIndex index="1">4</numIndex>
 													</numIndex>
-												</items>
-											</config>
-											<displayCond>FIELD:settings.dataSource:=:1</displayCond>
-										</TCEforms>
-									</dataType>
-									<dataTypeLavst>
-										<TCEforms>
-											<label>
-												LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType
-											</label>
-											<config>
-												<type>select</type>
-												<renderType>selectSingle</renderType>
-												<items>
-													<numIndex index="4" type="array">
-														<numIndex index="0">
-															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType.4
-														</numIndex>
-														<numIndex index="1">4</numIndex>
-													</numIndex>
 													<numIndex index="5" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType.5
@@ -252,9 +232,8 @@
 													</numIndex>
 												</items>
 											</config>
-											<displayCond>FIELD:settings.dataSource:=:2</displayCond>
 										</TCEforms>
-									</dataTypeLavst>
+									</dataType>
 									<graphType>
 										<TCEforms>
 											<label>
@@ -443,26 +422,6 @@
 														</numIndex>
 														<numIndex index="1">4</numIndex>
 													</numIndex>
-												</items>
-											</config>
-											<displayCond>FIELD:settings.dataSource:=:1</displayCond>
-										</TCEforms>
-									</dataType>
-									<dataTypeLavst>
-										<TCEforms>
-											<label>
-												LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType
-											</label>
-											<config>
-												<type>select</type>
-												<renderType>selectSingle</renderType>
-												<items>
-													<numIndex index="4" type="array">
-														<numIndex index="0">
-															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType.4
-														</numIndex>
-														<numIndex index="1">4</numIndex>
-													</numIndex>
 													<numIndex index="5" type="array">
 														<numIndex index="0">
 															LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType.5
@@ -471,9 +430,8 @@
 													</numIndex>
 												</items>
 											</config>
-											<displayCond>FIELD:settings.dataSource:=:2</displayCond>
 										</TCEforms>
-									</dataTypeLavst>
+									</dataType>
 									<graphType>
 										<TCEforms>
 											<label>

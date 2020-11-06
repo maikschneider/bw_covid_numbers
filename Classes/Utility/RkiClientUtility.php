@@ -8,6 +8,17 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class RkiClientUtility
 {
 
+    private static function calcSumPer100k(int $key, array $dataOverTime, int $population)
+    {
+        if(!$population || $population === 0) {
+            return 0;
+        }
+
+        $populationFactor = round($population / 100000, 3);
+
+        return round($dataOverTime[$key]['sum'] / $populationFactor, 2);
+    }
+
     public static function calc7DayAverage($date, $dataOverTime)
     {
         $keyMinus7Days = $date - 604800000;
@@ -161,6 +172,10 @@ class RkiClientUtility
 
                 // calculate 7 per 100.000
                 $graph->dataOverTime[$key]['week'] = self::calc7DayWeek($key, $graph->dataOverTime, $graph->population);
+
+                // sum per 100.000
+                $graph->dataOverTime[$key]['sumPer100k'] = self::calcSumPer100k($key, $graph->dataOverTime,
+                    $graph->population);
 
                 $previousReportIndex = $key;
             }

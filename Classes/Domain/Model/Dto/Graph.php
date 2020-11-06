@@ -104,7 +104,7 @@ class Graph
     public function getDatasetConfig($settings): array
     {
         // select data from dataType
-        $dataTypeMapping = [1 => 'AnzahlFall', 2 => 'avg', 3 => 'sum', 4 => 'week'];
+        $dataTypeMapping = [1 => 'AnzahlFall', 2 => 'avg', 3 => 'sum', 4 => 'week', 5 => 'sumPer100k'];
         $dataOffset = $dataTypeMapping[$this->dataType];
         $data = array_map(function ($day) use ($dataOffset) {
             return $day[$dataOffset];
