@@ -48,8 +48,6 @@ class LavstClientUtility
             $this->doDataTypeCalculations($graph, $dataOverTimes);
         }
 
-        \TYPO3\CMS\Core\Utility\DebugUtility::debug($graphs, 'Debug: ' . __FILE__ . ' in Line: ' . __LINE__);
-
         unset($graph);
     }
 
@@ -111,8 +109,6 @@ class LavstClientUtility
                 }
             }
         }
-
-        \TYPO3\CMS\Core\Utility\DebugUtility::debug($dataOverTimes, 'Debug: ' . __FILE__ . ' in Line: ' . __LINE__);
 
         return $dataOverTimes;
     }

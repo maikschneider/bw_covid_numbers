@@ -3,9 +3,7 @@
 namespace Blueways\BwCovidNumbers\Utility;
 
 use Blueways\BwCovidNumbers\Domain\Model\Dto\Graph;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Lang\LanguageService;
 
 class ChartUtility
 {
@@ -25,20 +23,19 @@ class ChartUtility
         $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
         $cacheIdentifier = 'chartConfig' . md5(serialize($this->settings));
 
-        //if (($chartConfig = $cache->get($cacheIdentifier)) === false) {
+        if (($chartConfig = $cache->get($cacheIdentifier)) === false) {
             $graphs = TcaToGraphUtility::createGraphsFromTca($this->settings);
             $this->updateGraphs($graphs);
             $chartConfig = $this->constructGraphConfig($graphs);
-
             $cache->set($cacheIdentifier, $chartConfig, [], 82800);
-        //}
+        }
 
         return $chartConfig;
     }
 
     private function updateGraphs($graphs)
     {
-        if((int)$this->settings['dataSource'] === 1) {
+        if ((int)$this->settings['dataSource'] === 1) {
             /** @var \Blueways\BwCovidNumbers\Utility\RkiClientUtility $rkiUtil */
             $rkiUtil = GeneralUtility::makeInstance(RkiClientUtility::class);
             $rkiUtil->updateGraphs($graphs);
@@ -50,8 +47,6 @@ class ChartUtility
             $lavstUtil->updateGraphs($graphs);
         }
     }
-
-
 
     public function constructGraphConfig($graphs)
     {
@@ -75,7 +70,6 @@ class ChartUtility
     }
 
     /**
-     *
      * @param $graphs
      * @return array|false[]|string[]
      */
