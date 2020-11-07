@@ -81,7 +81,7 @@ class ChartUtility
 
         /** @var Graph $graph */
         $graph = $graphs[0];
-        $offset = ((int)$this->settings['filterTime'] > 0) ? count($graph->dataOverTime) - (int)$this->settings['filterTime'] : 0;
+        $offset = ((int)$this->settings['filterTime'] > 0 && (int)$this->settings['filterTime'] < count($graph->dataOverTime)) ? count($graph->dataOverTime) - (int)$this->settings['filterTime'] : 0;
         $dateKeys = array_slice(array_keys($graph->dataOverTime), $offset);
 
         return array_map(static function ($dateKey) {

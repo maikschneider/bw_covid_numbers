@@ -121,7 +121,7 @@ class Graph
         }, $this->dataOverTime);
 
         // cut
-        $offset = ((int)$settings['filterTime'] > 0) ? count($data) - (int)$settings['filterTime'] : 0;
+        $offset = ((int)$settings['filterTime'] > 0 && (int)$settings['filterTime'] < count($data)) ? count($data) - (int)$settings['filterTime'] : 0;
         $data = array_slice($data, $offset);
 
         // get settings for style
