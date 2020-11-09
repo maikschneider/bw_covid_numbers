@@ -3,7 +3,9 @@
 namespace Blueways\BwCovidNumbers\Utility;
 
 use Blueways\BwCovidNumbers\Domain\Model\Dto\Graph;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Lang\LanguageService;
 
 class ChartUtility
 {
@@ -25,27 +27,15 @@ class ChartUtility
 
         if (($chartConfig = $cache->get($cacheIdentifier)) === false) {
             $graphs = TcaToGraphUtility::createGraphsFromTca($this->settings);
-            $this->updateGraphs($graphs);
+            /** @var \Blueways\BwCovidNumbers\Utility\RkiClientUtility $rkiUtil */
+            $rkiUtil = GeneralUtility::makeInstance(RkiClientUtility::class);
+            $rkiUtil->updateGraphs($graphs);
             $chartConfig = $this->constructGraphConfig($graphs);
+
             $cache->set($cacheIdentifier, $chartConfig, [], 82800);
         }
 
         return $chartConfig;
-    }
-
-    private function updateGraphs($graphs)
-    {
-        if ((int)$this->settings['dataSource'] === 1) {
-            /** @var \Blueways\BwCovidNumbers\Utility\RkiClientUtility $rkiUtil */
-            $rkiUtil = GeneralUtility::makeInstance(RkiClientUtility::class);
-            $rkiUtil->updateGraphs($graphs);
-        }
-
-        if ((int)$this->settings['dataSource'] === 2) {
-            /** @var \Blueways\BwCovidNumbers\Utility\LavstClientUtility $lavstUtil */
-            $lavstUtil = GeneralUtility::makeInstance(LavstClientUtility::class);
-            $lavstUtil->updateGraphs($graphs);
-        }
     }
 
     public function constructGraphConfig($graphs)
@@ -70,6 +60,7 @@ class ChartUtility
     }
 
     /**
+     *
      * @param $graphs
      * @return array|false[]|string[]
      */
@@ -81,7 +72,7 @@ class ChartUtility
 
         /** @var Graph $graph */
         $graph = $graphs[0];
-        $offset = ((int)$this->settings['filterTime'] > 0 && (int)$this->settings['filterTime'] < count($graph->dataOverTime)) ? count($graph->dataOverTime) - (int)$this->settings['filterTime'] : 0;
+        $offset = ((int)$this->settings['filterTime'] > 0) ? count($graph->dataOverTime) - (int)$this->settings['filterTime'] : 0;
         $dateKeys = array_slice(array_keys($graph->dataOverTime), $offset);
 
         return array_map(static function ($dateKey) {

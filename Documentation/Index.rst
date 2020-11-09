@@ -25,11 +25,10 @@ Create your own graph with the data you like:
     * Daily new infections
     * Daily new infections (7-Days Ø)
     * Incidence value: Number of infections (7-Days Σ/100.000)
-	* Number of infections (per 100.000)
 * Display as line or bar graph
 * Select color
 * Refresh data with scheduler
-* Data source from Landesamt für Verbraucherschutz Sachsen-Anhalt (LAVST)
+
 
 Installation
 ============

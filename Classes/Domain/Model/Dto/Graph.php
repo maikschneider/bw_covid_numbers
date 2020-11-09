@@ -54,16 +54,6 @@ class Graph
      */
     public $graphType;
 
-    /**
-     * @var integer
-     */
-    public $dataSource;
-
-    /**
-     * @var integer
-     */
-    public $IdLandkreisLavst;
-
     public function getWhereStatementForCovidQuery()
     {
         if ($this->isState) {
@@ -114,14 +104,14 @@ class Graph
     public function getDatasetConfig($settings): array
     {
         // select data from dataType
-        $dataTypeMapping = [1 => 'AnzahlFall', 2 => 'avg', 3 => 'sum', 4 => 'week', 5 => 'sumPer100k'];
+        $dataTypeMapping = [1 => 'AnzahlFall', 2 => 'avg', 3 => 'sum', 4 => 'week'];
         $dataOffset = $dataTypeMapping[$this->dataType];
         $data = array_map(function ($day) use ($dataOffset) {
             return $day[$dataOffset];
         }, $this->dataOverTime);
 
         // cut
-        $offset = ((int)$settings['filterTime'] > 0 && (int)$settings['filterTime'] < count($data)) ? count($data) - (int)$settings['filterTime'] : 0;
+        $offset = ((int)$settings['filterTime'] > 0) ? count($data) - (int)$settings['filterTime'] : 0;
         $data = array_slice($data, $offset);
 
         // get settings for style
@@ -164,16 +154,7 @@ class Graph
                 })) > 0;
 
         if (!$otherDataTypesInGraph && count($settings['graphs']) > 1) {
-
-            if ($this->isState) {
-                return $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state.' . $this->IdBundesland);
-            }
-
-            if ($this->dataSource === 2) {
-                return $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:lavst.district.' . $this->IdLandkreisLavst);
-            }
-
-            return $this->Landkreis;
+            return $this->isState ? $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state.' . $this->IdBundesland) : $this->Landkreis;
         }
 
         return $label;
