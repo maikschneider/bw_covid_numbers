@@ -3,9 +3,8 @@
 namespace Blueways\BwCovidNumbers\Utility;
 
 use Blueways\BwCovidNumbers\Domain\Model\Dto\Graph;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class ChartUtility
 {
@@ -23,7 +22,8 @@ class ChartUtility
     public function getChartConfig()
     {
         $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwcovidnumbers');
-        $cacheIdentifier = 'chartConfig' . md5(serialize($this->settings));
+        $uniqueLangString = LocalizationUtility::translate('bwcovidnumbers_pi1.title', 'bw_covid_numbers');
+        $cacheIdentifier = 'chartConfig' . md5($uniqueLangString . serialize($this->settings));
 
         if (($chartConfig = $cache->get($cacheIdentifier)) === false) {
             $graphs = TcaToGraphUtility::createGraphsFromTca($this->settings);
@@ -60,7 +60,6 @@ class ChartUtility
     }
 
     /**
-     *
      * @param $graphs
      * @return array|false[]|string[]
      */
