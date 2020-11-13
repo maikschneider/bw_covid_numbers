@@ -3,8 +3,7 @@
 namespace Blueways\BwCovidNumbers\Domain\Model\Dto;
 
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class Graph
 {
@@ -144,8 +143,7 @@ class Graph
         $dataType = $this->dataType;
 
         // 1. default label is data type
-        $llService = $this->getLanguageService();
-        $label = $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:flexform.dataType.' . $dataType);
+        $label = LocalizationUtility::translate('flexform.dataType.' . $dataType, 'bw_covid_numbers');
 
         // 2. set specific label of Bundesland or City (in case only dataType 1 or 2, e.g. 7 cities in comparison)
         $otherDataTypesInGraph = count(array_filter($settings['graphs'],
@@ -154,18 +152,11 @@ class Graph
                 })) > 0;
 
         if (!$otherDataTypesInGraph && count($settings['graphs']) > 1) {
-            return $this->isState ? $llService->sL('LLL:EXT:bw_covid_numbers/Resources/Private/Language/locallang.xlf:state.' . $this->IdBundesland) : $this->Landkreis;
+            return $this->isState ? LocalizationUtility::translate('state.' . $this->IdBundesland,
+                'bw_covid_numbers') : $this->Landkreis;
         }
 
         return $label;
-    }
-
-    /**
-     * @return LanguageService
-     */
-    private function getLanguageService()
-    {
-        return $GLOBALS['LANG'] ?: GeneralUtility::makeInstance(LanguageService::class);
     }
 
 }
