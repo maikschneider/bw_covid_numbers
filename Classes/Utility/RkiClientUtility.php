@@ -3,6 +3,9 @@
 namespace Blueways\BwCovidNumbers\Utility;
 
 use Blueways\BwCovidNumbers\Domain\Model\Dto\Graph;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class RkiClientUtility
@@ -60,10 +63,34 @@ class RkiClientUtility
         $features = $this->requestFeaturesForGraph($graph);
 
         $dataOverTime = [];
+        $featuresOverTime = [];
 
-        // create array with day as index
+        // create array with readable day as index
         foreach ($features as $key => $feature) {
-            $dataOverTime[$feature->attributes->Meldedatum]['AnzahlFall'] += $feature->attributes->AnzahlFall;
+            $date = date('Y-m-d', ($feature->attributes->Meldedatum / 1000));
+            $featuresOverTime[$date] = $feature->attributes;
+        }
+
+        // create period from first day until now
+        $period = new DatePeriod(
+            new DateTime(date('Y-m-d', ($features[0]->attributes->Meldedatum / 1000))),
+            new DateInterval('P1D'),
+            new DateTime('now')
+        );
+
+        // crawl every day
+        foreach ($period as $key => $value) {
+            $date = $value->format('Y-m-d');
+
+            // look for feature via readable day index
+            if (array_key_exists($date, $featuresOverTime)) {
+                $feature = $featuresOverTime[$date];
+                $dataOverTime[$feature->Meldedatum] = ['AnzahlFall' => $feature->AnzahlFall];
+                continue;
+            }
+
+            // set 0 if not in dataset
+            $dataOverTime[$value->getTimestamp() * 1000] = ['AnzahlFall' => 0];
         }
 
         $graph->dataOverTime = $dataOverTime;
