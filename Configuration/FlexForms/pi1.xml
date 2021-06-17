@@ -307,7 +307,7 @@
 											<config>
 												<type>input</type>
 												<size>10</size>
-												<renderType>colorPicker</renderType>
+												<renderType>colorpicker</renderType>
 											</config>
 										</TCEforms>
 									</color>
