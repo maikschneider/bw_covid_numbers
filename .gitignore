@@ -4,3 +4,5 @@ bin
 public
 !Resources/Public
 Documentation-GENERATED-temp
+var
+config

@@ -43,9 +43,8 @@
     }
   },
   "require-dev": {
-    "roave/security-advisories": "dev-master",
-    "typo3/cms-base-distribution": "^8.0",
-    "bk2k/bootstrap-package": "^8.0"
+    "typo3/cms-base-distribution": "^9.0",
+    "bk2k/bootstrap-package": "^10.0"
   },
   "suggest": {
     "reelworx/rx-shariff": "~10.0"
