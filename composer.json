@@ -22,9 +22,6 @@
   "config": {
     "bin-dir": "bin",
     "vendor-dir": "vendor",
-    "platform": {
-      "php": "7.3"
-    },
     "allow-plugins": {
       "typo3/cms-composer-installers": true,
       "typo3/class-alias-loader": true,
@@ -38,7 +35,7 @@
   },
   "require": {
     "ext-json": "*",
-    "typo3/cms-core": "^7.0 || ^8.0 || ^9.0 || ^10.0"
+    "typo3/cms-core": "^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0"
   },
   "autoload": {
     "psr-4": {
@@ -46,10 +43,37 @@
     }
   },
   "require-dev": {
-    "typo3/cms-base-distribution": "^9.0",
-    "bk2k/bootstrap-package": "^10.0"
-  },
-  "suggest": {
-    "reelworx/rx-shariff": "~10.0"
+    "typo3/cms-adminpanel": "^11.5",
+    "typo3/cms-backend": "^11.5",
+    "typo3/cms-belog": "^11.5",
+    "typo3/cms-beuser": "^11.5",
+    "typo3/cms-core": "^11.5",
+    "typo3/cms-dashboard": "^11.5",
+    "typo3/cms-extbase": "^11.5",
+    "typo3/cms-extensionmanager": "^11.5",
+    "typo3/cms-felogin": "^11.5",
+    "typo3/cms-filelist": "^11.5",
+    "typo3/cms-fluid": "^11.5",
+    "typo3/cms-fluid-styled-content": "^11.5",
+    "typo3/cms-form": "^11.5",
+    "typo3/cms-frontend": "^11.5",
+    "typo3/cms-impexp": "^11.5",
+    "typo3/cms-indexed-search": "^11.5",
+    "typo3/cms-info": "^11.5",
+    "typo3/cms-install": "^11.5",
+    "typo3/cms-lowlevel": "^11.5",
+    "typo3/cms-opendocs": "^11.5",
+    "typo3/cms-recordlist": "^11.5",
+    "typo3/cms-recycler": "^11.5",
+    "typo3/cms-redirects": "^11.5",
+    "typo3/cms-reports": "^11.5",
+    "typo3/cms-rte-ckeditor": "^11.5",
+    "typo3/cms-scheduler": "^11.5",
+    "typo3/cms-seo": "^11.5",
+    "typo3/cms-setup": "^11.5",
+    "typo3/cms-tstemplate": "^11.5",
+    "typo3/cms-viewpage": "^11.5",
+    "helhum/typo3-console": "^7.0",
+    "bk2k/bootstrap-package": "^12.0"
   }
 }
