@@ -12,12 +12,15 @@ $iconRegistry->registerIcon(
     ['source' => 'EXT:bw_covid_numbers/ext_icon.svg']
 );
 
+$typo3Version = TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionStringToArray(TYPO3\CMS\Core\Utility\VersionNumberUtility::getNumericTypo3Version());
+$controllerName = $typo3Version['version_main'] >= 10 ? \Blueways\BwCovidNumbers\Controller\CovidController::class : 'Covid';
+
 // register frontend plugin
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'Blueways.BwCovidNumbers',
     'Pi1',
     [
-        'Covid' => 'chart'
+        $controllerName => 'chart'
     ],
     []
 );
