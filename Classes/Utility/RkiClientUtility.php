@@ -10,7 +10,31 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class RkiClientUtility
 {
+	protected $streamContext = null;
+	private function getStreamContext() {
+		if (!$this->streamContext) {
+			// Set Proxy for file_get_contents
+			if ($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']) {
+				$contextArray = []
+				];
+				if ($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http']) {
+					$contextArray['http'] = [
+						'proxy' => $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'],
+						'request_fulluri' => true,
+					];
+				}
+				if ($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['https']) {
+					$contextArray['https'] = [
+						'proxy' => $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['https'],
+						'request_fulluri' => true,
+					];
+				}
 
+				$this->streamContext = stream_context_create($contextArray);
+			}
+		}
+		return $this->streamContext;
+	}
     public static function calc7DayAverage($date, $dataOverTime)
     {
         $keyMinus7Days = $date - 604800000;
@@ -104,7 +128,7 @@ class RkiClientUtility
         $where = urlencode($whereStatement);
 
         if (!$apiData = $cache->get($cacheIdentifier)) {
-            $apiData = file_get_contents('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/Covid19_hubv/FeatureServer/0/query?where=' . $where . '&outStatistics=[{"statisticType":"sum","onStatisticField":"AnzahlFall","outStatisticFieldName":"AnzahlFall"}]&groupByFieldsForStatistics=Meldedatum&sqlFormat=none&f=pjson&token=');
+            $apiData = file_get_contents('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/Covid19_hubv/FeatureServer/0/query?where=' . $where . '&outStatistics=[{"statisticType":"sum","onStatisticField":"AnzahlFall","outStatisticFieldName":"AnzahlFall"}]&groupByFieldsForStatistics=Meldedatum&sqlFormat=none&f=pjson&token=',null,$this->getStreamContext());
             $apiData = json_decode($apiData, false)->features;
             $cache->set($cacheIdentifier, $apiData, [], 82800);
         }
@@ -147,7 +171,7 @@ class RkiClientUtility
         // get for state
         if ($graph->isState) {
             $url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/Coronaf%C3%A4lle_in_den_Bundesl%C3%A4ndern/FeatureServer/0/query?where=OBJECTID_1+%3D+11&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=";
-            $populationData = json_decode(file_get_contents($url));
+            $populationData = json_decode(file_get_contents($url,null,$this->getStreamContext()));
             $population = $populationData->features[0]->attributes->LAN_ew_EWZ;
         }
 
@@ -157,7 +181,7 @@ class RkiClientUtility
             $where = $graph->getWhereStatementForPopulationQuery();
 
             $url = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=" . $where . "&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=";
-            $populationData = json_decode(file_get_contents($url), true);
+            $populationData = json_decode(file_get_contents($url,null,$this->getStreamContext()), true);
             $population = $populationData['features'][0]['attributes']['EWZ'];
         }
 
