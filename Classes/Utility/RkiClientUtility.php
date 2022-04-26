@@ -15,8 +15,7 @@ class RkiClientUtility
 		if (!$this->streamContext) {
 			// Set Proxy for file_get_contents
 			if ($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']) {
-				$contextArray = []
-				];
+				$contextArray = [];
 				if ($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http']) {
 					$contextArray['http'] = [
 						'proxy' => $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'],
